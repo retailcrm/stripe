@@ -1,0 +1,14 @@
+version: '2.2'
+
+services:
+
+    php:
+        build:
+            args:
+                WITH_PINBA: "no"
+                WITH_XDEBUG: "no"
+        environment:
+            - COMPOSER_HOME=/composer
+            - APP_ENV=test
+        volumes:
+            - "$HOME/.composer:/composer"

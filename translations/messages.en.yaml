@@ -1,0 +1,48 @@
+base:
+    title: Integration retailCRM with Stripe
+api:
+    order_description: 'Payment for order №'
+    cancelation_detail: 'Cancelled by manager'
+    check_order_cancel: 'Failed verification in the checkOrder request'
+    cancellation_reasons:
+        duplicate: 'Duplicate payment'
+        fraudulent: 'Fraudulent payment'
+        requested_by_customer: 'Requested by customer'
+        abandoned: 'Abandoned payment'
+        failed_invoice: 'Failed invoice'
+        void_invoice: 'Void invoice'
+        automatic: 'Automatic cancellation'
+    error:
+        alien_account: 'Account does not belong to an existing integration'
+        deactivated_account: 'Account is deactivated'
+        approve_impossible_by_status: 'Payment confirmation is only possible from the waiting_for_capture status'
+        refund_impossible_by_status: 'Refund is only possible from the succeeded status'
+        approve_manually_deny: 'Manual payment confirmation is disabled'
+        integration_disabled: 'Integration is disabled or frozen'
+        invalid_request_data: 'Invalid data in the request'
+        invalid_fiscal_data: 'Invalid data for fiscalization'
+flash:
+    crm_not_save: 'Updating settings failed in CRM'
+    invalid_get_token: 'Failed to get a token.'
+    account_already_deactivated: 'Store has already been deactivated.'
+    account_error_deactivated: 'An error occurred while deactivating the store.'
+    invalid_sync: 'Failed to synchronize settings.'
+validator:
+    api_access:
+        exception:
+            curl: 'Failed to connect to API'
+            service_unavailable: 'Service is temporarily unavailable'
+            invalid_json: 'API returned a response in an unsupported format API'
+            requires_https: 'API address must start with https'
+            wrong_apikey: 'Wrong API-key'
+        access_denied: 'Access to the method "%method%" is denied'
+loader:
+    title_redirect: Redirection
+    title_cancel: Payment canceled
+    title_not_found: Payment not found
+    title_payment: Payment is made
+    wait: Please wait. You will now be redirected to the payment page.
+    error: An error occurred during redirection. Try to refresh the page
+    cancel: Payment canceled. Contact your manager to get a new link.
+    not_found: Payment not found. Contact your manager to get a new link.
+    payment: Payment was made successfully.

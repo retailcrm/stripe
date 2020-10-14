@@ -1,0 +1,16 @@
+{% extends 'short/base.html.twig' %}
+
+{% block title %}{{ 'loader.title_redirect'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="loader" data-key="{{ public_key }}" data-session-id="{{ session_id }}">
+        <div class="block downloading text-center">
+            <img class="spin" src="{{ asset('build/images/loader.png') }}" alt="Loading...">
+            <p class="description">{{ 'loader.wait'|trans }}</p>
+        </div>
+        <div class="block error text-center hidden">
+            <span class="fa fa-close icon"></span>
+            <p class="description">{{ 'loader.error'|trans }}</p>
+        </div>
+    </div>
+{% endblock %}

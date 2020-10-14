@@ -1,0 +1,196 @@
+.opacity50 {
+  opacity: 0.5;
+}
+
+.alert {
+  padding: 15px;
+  border-radius: 5px;
+  text-align: left;
+  font-size: 14px;
+  margin-bottom: 2px;
+
+  &.alert-error {
+    background: #e61717;
+    color: #fff;
+  }
+
+  &.alert-success {
+    background: #509a37;
+    color: #fff;
+  }
+
+  &.fixed {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 99999;
+    max-width: 300px;
+  }
+
+  &.hide {
+    animation-duration: 5s;
+    animation-name: hide-alert;
+    animation-fill-mode: forwards;
+  }
+}
+
+@keyframes hide-alert {
+  0% {
+    opacity: 0;
+    display: none;
+  }
+  25% {
+    opacity: 1;
+    display: block;
+  }
+  75% {
+    opacity: 1;
+    display: block;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+.has-error {
+  color: #e61717;
+}
+
+section label:not(.checkbox) {
+  font-size: 13px;
+}
+
+.mrow {
+  padding-bottom: 10px;
+  font-size: 14px;
+}
+
+.mhalf {
+  width: 50%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .mhalf {
+    width: 100%;
+  }
+
+  .mrow_title_hidden {
+    display: none;
+  }
+}
+
+.main_logo {
+  margin: 40px 0 20px;
+  display: inline-block;
+}
+
+.status {
+  padding-bottom: 20px;
+  max-width: 155px;
+  margin: 0 auto;
+  position: relative;
+  left: 25px;
+  text-align: left;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 3px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+  }
+
+  &.active {
+    &:before {
+      background: #2ca02c;
+    }
+  }
+
+  &.inactive {
+    &:before {
+      background: #ff4136;
+    }
+  }
+}
+
+.loader {
+  height: 100%;
+
+  .block {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .spin {
+    margin: 0 auto;
+    width: 200px;
+    height: 200px;
+    animation: spin 2s linear infinite;
+  }
+
+  .description {
+    padding: 0;
+    text-align: center;
+  }
+
+  .icon {
+    font-size: 64px;
+
+    &.green {
+      color: #509a37;
+    }
+
+    &.red {
+      color: #ff4136;
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+}
+
+table {
+  font-size: 0.9em;
+}
+
+.alert-warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+.alert {
+  position: relative;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+}
+
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

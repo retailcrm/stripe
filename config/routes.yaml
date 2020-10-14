@@ -1,0 +1,120 @@
+index:
+    path: /{vueRouting}
+    controller: App\Controller\IntegrationController::index
+    methods: GET
+    requirements:
+        vueRouting: '^(?!apihook|oauth-hook|connect|pay|integration|add|activity|test|account|_(profiler|wdt)).*'
+
+stripe_settings:
+    path: /settings/{slug}
+    controller: App\Controller\IntegrationController::settings
+
+stripe_connect:
+    path:  /connect
+    controller: App\Controller\IntegrationController::connect
+    methods: POST
+    options:
+        expose: true
+
+stripe_get_settings:
+    path: /integration/{slug}/get
+    controller: App\Controller\IntegrationController::getIntegrationData
+    methods: GET
+    options:
+        expose: true
+
+stripe_edit_settings:
+    path: /integration/{slug}/edit
+    controller: App\Controller\IntegrationController::editIntegration
+    methods: POST
+    options:
+        expose: true
+
+stripe_account:
+    path: /account/{id}
+    controller: App\Controller\AccountController::account
+    methods: GET
+    options:
+        expose: true
+
+stripe_edit_account:
+    path: /account/{id}/edit
+    controller: App\Controller\AccountController::edit
+    methods: POST
+    options:
+        expose: true
+
+stripe_add_account:
+    path: /add/{slug}
+    controller: App\Controller\AccountController::add
+    methods: POST
+    options:
+        expose: true
+
+stripe_sync_account:
+    path: /account/{id}/sync
+    controller: App\Controller\AccountController::sync
+    methods: GET
+    options:
+        expose: true
+
+stripe_deactivate_account:
+    path:  /account/{id}/deactivate
+    controller: App\Controller\AccountController::deactivate
+    methods: GET
+    options:
+        expose: true
+
+# Stripe hooks
+stripe_hooks:
+    path: /hooks/{id}
+    controller: App\Controller\HookController::hooks
+
+# API
+crm_payment_create:
+    path:  /payment/create
+    controller: App\Controller\PaymentAPIController::create
+    format: json
+    methods: POST
+
+crm_payment_cancel:
+    path:  /payment/cancel
+    controller: App\Controller\PaymentAPIController::cancel
+    format: json
+    methods: POST
+
+crm_payment_approve:
+    path:  /payment/approve
+    controller: App\Controller\PaymentAPIController::approve
+    format: json
+    methods: POST
+
+crm_payment_refund:
+    path:  /payment/refund
+    controller: App\Controller\PaymentAPIController::refund
+    methods: POST
+
+crm_payment_status:
+    path:  /payment/status
+    controller: App\Controller\PaymentAPIController::status
+    format: json
+    methods: GET
+
+crm_connection_activity:
+    path:  /activity
+    controller: App\Controller\CRMConnectController::activity
+    format: json
+    methods: POST
+
+short_url:
+    path:  /pay/{slug}
+    controller: App\Controller\ShortController::index
+    methods:
+        - GET
+        - POST
+    requirements:
+        slug: '^[\w+\d+]{6}$'
+
+stripe_test:
+    path:  /test
+    controller: App\Controller\IntegrationController::test

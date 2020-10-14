@@ -1,0 +1,5 @@
+{
+  "retailcrm/api-client-php": {
+    "add logger": "patches/retailcrm/api-client-php/add-logger.patch"
+  }
+}

@@ -1,0 +1,27 @@
+fields:
+    accountId: id de la cuenta
+    invoiceType: tipo del pedido
+    orderNumber: número del pedido
+    amount: importe
+    currency: moneda
+    invoiceUuid: Uuid del pedido
+    paymentId: id del pago
+    status: estado
+    cancellationDetails: detalles de la cancelación
+    invoiceUrl: url para el pago
+    paidAt: fecha del pago
+    expiredAt: fecha del vencimiento de pago
+    clientId: id de la integración del módulo de pago
+    email: email
+    phone: teléfono
+    firstName: nombre del comprador
+    lastName: apellido del comprador
+    patronymic: patronímico del comprador
+    sex: sexo del comprador
+    name: nombre del producto
+    quantity: cantidad del producto
+    paymentMethod: método del pago
+    paymentObject: atributo de artículo de liquidación
+    vat: tasa de IVA
+    customer: comprador
+    siteUrl: URL de la tienda

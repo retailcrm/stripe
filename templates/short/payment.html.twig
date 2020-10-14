@@ -1,0 +1,12 @@
+{% extends 'short/base.html.twig' %}
+
+{% block title %}{{ 'loader.title_payment'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="loader">
+        <div class="block text-center">
+            <span class="fa fa-check icon green"></span>
+            <p class="description">{{ 'loader.payment'|trans }}</p>
+        </div>
+    </div>
+{% endblock %}

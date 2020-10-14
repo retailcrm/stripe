@@ -1,0 +1,50 @@
+base:
+    title: Integración de Stripe con RetailCRM
+api:
+    order_description: 'Pago del pedido №'
+    cancelation_detail: 'Cancelado por el mánager'
+    check_order_cancel: 'Error de validación en la consulta checkOrder'
+    cancellation_reasons:
+        duplicate: 'Pago duplicado'
+        fraudulent: 'Pago fraudulento'
+        requested_by_customer: 'por solicitud del cliente'
+        abandoned: 'Pago abandonado'
+        failed_invoice: 'Factura fallida'
+        void_invoice: 'Void de factura'
+        automatic: 'Cancelación automática'
+    error:
+        alien_account: 'La cuenta no pertenece a la integración existente'
+        deactivated_account: 'Cuenta desactivada'
+        approve_impossible_by_status: 'La confirmación del pago solo es posible desde el estado waiting_for_capture'
+        refund_impossible_by_status: 'La devolución solo es posible desde el estado succeeded'
+        approve_manually_deny: 'Confirmación de pago manual desactivada'
+        integration_disabled: 'Integración desactivada o congelada'
+        invalid_request_data: 'Datos incorrectos en la consulta'
+        invalid_fiscal_data: 'Datos incorrectos para la fiscalización'
+flash:
+    crm_not_save: 'Las configuraciones no se actualizaron correctamente en CRM'
+    invalid_get_token: 'No se pudo obtener el token.'
+    account_already_deactivated: 'La tienda ya está desactivada.'
+    account_error_deactivated: 'Error en la desactivación de la tienda.'
+    invalid_sync: 'No se pudo sincronizar las configuraciones.'
+
+validator:
+    api_access:
+        exception:
+            curl: 'No se pudo conectarse a API'
+            service_unavailable: 'El servicio no está disponible temporalmente'
+            invalid_json: 'La API devolvió la respuesta en un formato no compatible'
+            requires_https: 'la dirección API debe comenzar con https'
+            wrong_apikey: 'Clave API incorrecta'
+        access_denied: 'Acceso denegado al método "%method%"'
+
+loader:
+    title_redirect: Redirección
+    title_cancel: Pago cancelado
+    title_not_found: Pago no encontrado
+    title_payment: Pago realizado
+    wait: Espera un segundo. Ahora será redirigido a la página de pago.
+    error: Se produjo un error al redirigir. Intenta actualizar la página.
+    cancel: Pago cancelado. Póngase en contacto con el mánager para obtener un nuevo enlace.
+    not_found: Pago no encontrado. Póngase en contacto con el mánager para obtener un nuevo enlace.
+    payment: Pago realizado con éxito.

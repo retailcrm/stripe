@@ -1,0 +1,153 @@
+diff --git a/composer.json b/composer.json
+index 027dba9..09ed2a4 100644
+--- a/composer.json
++++ b/composer.json
+@@ -15,7 +15,8 @@
+         "php": ">=5.4.0",
+         "ext-curl": "*",
+         "ext-json": "*",
+-        "ext-fileinfo": "*"
++        "ext-fileinfo": "*",
++        "psr/log": "^1.1"
+     },
+     "require-dev": {
+         "phpunit/phpunit": "6.*",
+diff --git a/lib/RetailCrm/ApiClient.php b/lib/RetailCrm/ApiClient.php
+index 5acfed0..b03b672 100644
+--- a/lib/RetailCrm/ApiClient.php
++++ b/lib/RetailCrm/ApiClient.php
+@@ -14,6 +14,7 @@
+ 
+ namespace RetailCrm;
+ 
++use Psr\Log\LoggerInterface;
+ use RetailCrm\Client\ApiVersion3;
+ use RetailCrm\Client\ApiVersion4;
+ use RetailCrm\Client\ApiVersion5;
+@@ -73,4 +74,14 @@ class ApiClient
+     {
+         return $this->version;
+     }
++
++    /**
++     * Set logger
++     *
++     * @param LoggerInterface|null $logger
++     */
++    public function setLogger(LoggerInterface $logger = null)
++    {
++        $this->request->setLogger($logger);
++    }
+ }
+diff --git a/lib/RetailCrm/Client/AbstractLoader.php b/lib/RetailCrm/Client/AbstractLoader.php
+index c021a1a..8400a23 100755
+--- a/lib/RetailCrm/Client/AbstractLoader.php
++++ b/lib/RetailCrm/Client/AbstractLoader.php
+@@ -14,6 +14,7 @@
+ 
+ namespace RetailCrm\Client;
+ 
++use Psr\Log\LoggerInterface;
+ use RetailCrm\Http\Client;
+ 
+ /**
+@@ -137,6 +138,16 @@ abstract class AbstractLoader
+         return $this->siteCode;
+     }
+ 
++    /**
++     * Set logger
++     *
++     * @param LoggerInterface|null $logger
++     */
++    public function setLogger($logger)
++    {
++        $this->client->setLogger($logger);
++    }
++
+     /**
+      * Getting the list of available api versions
+      *
+diff --git a/lib/RetailCrm/Http/Client.php b/lib/RetailCrm/Http/Client.php
+index f0c2840..499f666 100755
+--- a/lib/RetailCrm/Http/Client.php
++++ b/lib/RetailCrm/Http/Client.php
+@@ -14,6 +14,7 @@
+ 
+ namespace RetailCrm\Http;
+ 
++use Psr\Log\LoggerInterface;
+ use RetailCrm\Exception\CurlException;
+ use RetailCrm\Exception\InvalidJsonException;
+ use RetailCrm\Exception\LimitException;
+@@ -38,6 +39,11 @@ class Client
+     protected $url;
+     protected $defaultParameters;
+ 
++    /**
++     * @var LoggerInterface|null $logger
++     */
++    protected $logger;
++
+     /**
+      * Client constructor.
+      *
+@@ -97,6 +103,8 @@ class Client
+ 
+         $url = $fullPath ? $path : $this->url . $path;
+ 
++        $this->logRequestParams($url, $method, $parameters);
++
+         if (self::METHOD_GET === $method && count($parameters)) {
+             $url .= '?' . http_build_query($parameters, '', '&');
+         }
+@@ -128,6 +136,8 @@ class Client
+         $responseBody = curl_exec($curlHandler);
+         $statusCode = curl_getinfo($curlHandler, CURLINFO_HTTP_CODE);
+ 
++        $this->logResponse($responseBody, $statusCode);
++
+         if ($statusCode == 503) {
+             throw new LimitException("Service temporary unavailable");
+         }
+@@ -144,6 +154,40 @@ class Client
+         return new ApiResponse($statusCode, $responseBody);
+     }
+ 
++    /**
++     * @param LoggerInterface|null $logger
++     */
++    public function setLogger($logger)
++    {
++        $this->logger = $logger;
++    }
++
++    private function logRequestParams($url, $method, $params)
++    {
++        if (null === $this->logger) {
++            return;
++        }
++
++        $message = 'Send request: ' . $method . ' ' . $url;
++
++        if (!empty($params)) {
++            $message .= ' with params: ' . json_encode($params);
++        }
++
++        $this->logger->info($message);
++    }
++
++    private function logResponse($responseBody, $statusCode)
++    {
++        if (null === $this->logger) {
++            return;
++        }
++
++        $message = 'Response with code ' . $statusCode . ' received with body: ' . $responseBody;
++
++        $this->logger->info($message);
++    }
++
+     /**
+      * Make HTTP request and deserialize JSON body (throws exception otherwise)
+      *

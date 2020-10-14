@@ -1,0 +1,27 @@
+fields:
+    accountId: account id
+    invoiceType: order type
+    orderNumber: order number
+    amount: amount
+    currency: currency
+    invoiceUuid: order Uuid
+    paymentId: payment id
+    status: status
+    cancellationDetails: cancellation details
+    invoiceUrl: payment url
+    paidAt: payment date
+    expiredAt: payment expiration date
+    clientId: payment integration module id
+    email: email
+    phone: phone
+    firstName: customer first name
+    lastName: customer last name
+    patronymic: customer patronymic
+    sex: customer sex
+    name: product name
+    quantity: product quantity
+    paymentMethod: payment method
+    paymentObject: payment object
+    vat: VAT rate
+    customer: customer
+    siteUrl: store URL

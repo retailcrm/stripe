@@ -1,0 +1,37 @@
+version: '2.2'
+
+services:
+    php:
+        build:
+            args:
+                WITH_PINBA: "yes"
+                WITH_XDEBUG: "yes"
+        environment:
+            - APP_ENV=dev
+        depends_on:
+            - pinba
+
+    php_debug:
+        restart: always
+        build:
+            context: ./services/php
+            args:
+                WITH_PINBA: "yes"
+                WITH_XDEBUG: "yes"
+        links:
+            - db
+            - redis
+        volumes_from:
+            - "php"
+        environment:
+            PHP_INI_SCAN_DIR: "/usr/local/etc/php/debug_conf.d"
+        depends_on:
+            - pinba
+
+    pinba:
+        restart: always
+        image: tony2001/pinba
+
+networks:
+    intaro_default:
+        external: true

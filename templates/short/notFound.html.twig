@@ -1,0 +1,12 @@
+{% extends 'short/base.html.twig' %}
+
+{% block title %}{{ 'loader.title_not_found'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="loader">
+        <div class="block text-center">
+            <span class="fa fa-ban icon red"></span>
+            <p class="description">{{ 'loader.not_found'|trans }}</p>
+        </div>
+    </div>
+{% endblock %}

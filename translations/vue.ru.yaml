@@ -1,0 +1,35 @@
+base:
+    title: 'Интеграция Stripe и RetailCRM'
+    integrations: 'Интеграции'
+    curIntegration: 'Stripe'
+    help: 'Попросить помощи'
+module:
+    connect:
+        api_key: 'API Ключ'
+        crm_url: 'Адрес CRM'
+        crm_url_placeholder: 'Например, https://demo.retailcrm.pro'
+        connect: 'Подключить'
+    settings:
+        title_connected_accounts: 'Подключенные аккаунты'
+        title_connection_setting: 'Настройки подключения'
+        btn_connected_accounts: 'Аккаунты'
+        btn_connection_setting: 'Подключение'
+        payment_type_settings: 'Настройка типов оплат'
+        save: 'Сохранить'
+        add_account: 'Добавить аккаунт'
+        account: 'Аккаунт'
+        account_name: 'Название'
+        test: 'Тестовый'
+        approve_manually: 'Подтверждать вручную'
+        sure: 'Вы уверены?'
+        no_accounts: 'Нет ни одного аккаунта'
+    status:
+        active: 'Модуль активен'
+        inactive: 'Модуль не активен'
+
+flash:
+    scs_saved: 'Успешно сохранено'
+
+button:
+    account_refresh: Обновить
+    account_delete: Удалить

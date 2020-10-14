@@ -1,0 +1,27 @@
+fields:
+    accountId: id аккаунта
+    invoiceType: тип заказа
+    orderNumber: номер заказа
+    amount: сумма
+    currency: валюта
+    invoiceUuid: Uuid заказа
+    paymentId: id платежа
+    status: статус
+    cancellationDetails: детали отмены
+    invoiceUrl: url для оплаты
+    paidAt: дата оплаты
+    expiredAt: дата истечения платежа
+    clientId: id интеграции платежного модуля
+    email: email
+    phone: телефон
+    firstName: имя покупателя
+    lastName: фамилия покупателя
+    patronymic: отчество покупателя
+    sex: пол покупателя
+    name: название товара
+    quantity: количество товара
+    paymentMethod: способ оплаты
+    paymentObject: признак предмета расчета
+    vat: ставка НДС
+    customer: покупатель
+    siteUrl: URL магазина

@@ -1,0 +1,51 @@
+version: '2.2'
+
+services:
+
+    db:
+        restart: always
+        image: postgres:9.6
+        volumes:
+            - "./.data/psql:/var/lib/postgresql/data"
+
+        environment:
+            POSTGRES_USER: retailcrm
+            POSTGRES_PASSWORD: retailcrm
+        ports:
+            - 15432:5432
+
+    redis:
+        restart: always
+        image: redis:5.0-alpine
+        volumes:
+            - "./.data/redis:/var/lib/redis"
+
+    php:
+        restart: always
+        build:
+            context: ./services/php
+            args:
+                WITH_PINBA: "no"
+                WITH_XDEBUG: "no"
+        links:
+            - db
+            - redis
+        volumes:
+            - "./:/var/www/stripe"
+
+    nginx:
+        build: ./services/nginx
+        volumes_from:
+            - "php:ro"
+        ports:
+            - 10001:80
+
+    node:
+        image: timbru31/node-alpine-git
+        environment:
+            - HOME=/var/www/stripe
+            - YARN_CACHE_FOLDER=/yarn
+        working_dir: "/var/www/stripe"
+        volumes:
+            - "./:/var/www/stripe/"
+            - "$HOME/.yarn:/yarn"

@@ -1,0 +1,50 @@
+base:
+    title: Интеграция Stripe и RetailCRM
+api:
+    order_description: 'Оплата по заказу №'
+    cancelation_detail: 'Отменено менеджером'
+    check_order_cancel: 'Не прошел проверку в запросе checkOrder'
+    cancellation_reasons:
+        duplicate: 'Дублированная оплата'
+        fraudulent: 'Мошенническая оплата'
+        requested_by_customer: 'По запросу клиента'
+        abandoned: 'Заброшенная оплата'
+        failed_invoice: 'Failed invoice'
+        void_invoice: 'Void invoice'
+        automatic: 'Автоматическая отмена'
+    error:
+        alien_account: 'Аккаунт не принадлежит существующей интеграции'
+        deactivated_account: 'Аккаунт деактивирован'
+        approve_impossible_by_status: 'Подтверждение оплаты возможно только из статуса waiting_for_capture'
+        refund_impossible_by_status: 'Возврат возможен только из статуса succeeded'
+        approve_manually_deny: 'Ручное подтверждение оплаты отключено'
+        integration_disabled: 'Интеграция выключена или заморожена'
+        invalid_request_data: 'Некорректные данные в запросе'
+        invalid_fiscal_data: 'Некорректные данные для фискализации'
+flash:
+    crm_not_save: 'Настройки не были успешно обновлены в CRM'
+    invalid_get_token: 'Не удалось получить токен.'
+    account_already_deactivated: 'Магазин уже деактивирован.'
+    account_error_deactivated: 'При деактивировации магазина прозошла ошибка.'
+    invalid_sync: 'Не удалось синхронизировать настройки.'
+
+validator:
+    api_access:
+        exception:
+            curl: 'Не удалось подключиться к API'
+            service_unavailable: 'Сервис временно недоступен'
+            invalid_json: 'API вернуло ответ в неподдерживаемом формате'
+            requires_https: 'Адрес API должен начинаться с https'
+            wrong_apikey: 'Неверный API-ключ'
+        access_denied: 'Доступ к методу "%method%" запрещен'
+
+loader:
+    title_redirect: Перенаправление
+    title_cancel: Платёж отменён
+    title_not_found: Платёж не найден
+    title_payment: Платёж произведён
+    wait: Подождите секунду. Сейчас вы будете перенаправлены на страницу оплаты.
+    error: При перенаправлении произошла ошибка. Попробуйте обновить страницу
+    cancel: Платёж отменён. Обратитесь к менеджеру для получения новой ссылки.
+    not_found: Платёж не найден. Обратитесь к менеджеру для получения новой ссылки.
+    payment: Оплата успешно произведена.

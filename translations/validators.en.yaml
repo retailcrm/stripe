@@ -1,0 +1,20 @@
+error:
+        not_blank: 'cannot be empty'
+        url: 'invalid url'
+        length: 'maximum length exceeded'
+        greater_than: 'must be greater than {{ compared_value }}'
+        uniq: 'this record already exists'
+        digits: 'only digits are allowed'
+        incorrect_type: 'incorrect value {{ value }}'
+        incorrect_currency: 'incorrect currency designation'
+        wrong_inn: 'incorrect TIN value'
+        entity_not_exists: 'entity not found'
+        integration_not_exists: 'integration not found'
+        not_valid_uuid: 'invalid uuid'
+        pay_status_important: 'you must specify conformity for the successful payment status'
+
+        account:
+                uniq: 'This account has already been added'
+                accountName:
+                        length: 'Maximum length of the account name has been exceeded'
+                        not_blank: 'Account name cannot be empty'

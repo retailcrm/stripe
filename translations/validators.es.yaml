@@ -1,0 +1,20 @@
+error:
+        not_blank: 'no puede estar vacío'
+        url: 'url no válido'
+        length: 'longitud máxima excedida'
+        greater_than: 'debe ser más que {{ compared_value }}'
+        uniq: 'tal registro ya existe'
+        digits: 'solo se permiten los números'
+        incorrect_type: 'valor no válido {{ value }}'
+        incorrect_currency: 'designación de moneda no válida'
+        wrong_inn: 'valor no válido de CIF'
+        entity_not_exists: 'entidad no encontrada'
+        integration_not_exists: 'integración no encontrada'
+        not_valid_uuid: 'uuid no válido'
+        pay_status_important: 'debes especificar la coincidencia del valor para el estado de pago exitoso'
+
+        account:
+                uniq: 'Esta cuenta ya está agregada'
+                accountName:
+                        length: 'Se ha excedido la longitud máxima del nombre de la cuenta'
+                        not_blank: 'El nombre de la cuenta no puede estar vacío'

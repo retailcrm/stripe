@@ -1,0 +1,35 @@
+base:
+    title: 'Integración de Stripe con RetailCRM'
+    integrations: 'Integraciones'
+    curIntegration: 'Stripe'
+    help: 'Pedir ayuda'
+module:
+    connect:
+        api_key: 'La clave API'
+        crm_url: 'url de CRM'
+        crm_url_placeholder: 'Por ejemplo, https://demo.retailcrm.pro'
+        connect: 'Conectar'
+    settings:
+        title_connected_accounts: 'Cuentas conectadas'
+        title_connection_setting: 'Configuraciones de conexión'
+        btn_connected_accounts: 'Cuentas'
+        btn_connection_setting: 'Conexión'
+        payment_type_settings: 'Configuraciones de tipos de pago'
+        save: 'Guardar'
+        add_account: 'Añadir cuenta'
+        account: 'Cuenta'
+        account_name: 'Nombre'
+        test: 'De prueba'
+        approve_manually: 'Confirmar manualmente'
+        sure: '¿Estás seguro?'
+        no_accounts: 'No hay ninguna cuenta'
+    status:
+        active: 'Módulo activo'
+        inactive: 'Módulo no activo'
+
+flash:
+    scs_saved: 'Guardado con éxito'
+
+button:
+    account_refresh: Actualizar
+    account_delete: Eliminar
