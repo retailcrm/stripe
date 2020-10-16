@@ -52,6 +52,7 @@
                             <ui-button
                                 :disabled="isLoading"
                                 :state="isLoading ? 'loading' : 'default'"
+                                form-type="submit"
                                 size="sm"
                             >
                                 {{ $t('module.connect.connect') }}
