@@ -47,7 +47,8 @@ release:
 
         - docker-compose build php node
 
-        - docker-compose run -e APP_ENV=prod -e APP_DEBUG=0 --rm --no-deps -u root php /usr/local/bin/composer --no-interaction install --prefer-dist --no-dev
+        - docker-compose run -e APP_ENV=prod -e APP_DEBUG=0 --rm --no-deps -u root php /usr/local/bin/composer --no-interaction install --no-scripts --prefer-dist --no-dev
+        - docker-compose run -e APP_ENV=prod -e APP_DEBUG=0 --rm --no-deps -u root php bin/console --env=prod assets:install public
         - docker-compose run -e APP_ENV=prod -e APP_DEBUG=0 --rm --no-deps -u root php bin/console --env=prod fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
 
         # build static
