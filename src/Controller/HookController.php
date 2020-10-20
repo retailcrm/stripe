@@ -227,14 +227,12 @@ class HookController extends AbstractController implements LoggableController
         $payment = $this->em->getRepository(Payment::class)->find($charge['payment_intent']);
 
         if (StripeManager::STATUS_PAYMENT_CANCELED === $payment->getStatus()) {
-
             return new Response();
         }
 
         $paymentIntent = $this->stripeManager->getPaymentInfo($payment);
 
         if (StripeManager::STATUS_PAYMENT_CANCELED === $paymentIntent['status']) {
-
             return new Response();
         }
 

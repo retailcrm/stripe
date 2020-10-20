@@ -1,5 +1,11 @@
 monolog:
+    channels: ["network"]
     handlers:
+        network:
+            level: info
+            type: stream
+            path: "php://stdout"
+            channels: ["network"]
         main:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"

@@ -14,6 +14,7 @@ before_script:
 
 stages:
     - test
+    - build
 
 phpunit:
     stage: test
@@ -31,3 +32,31 @@ phpunit:
         - docker-compose -f docker-compose.yml -f docker-compose.test.yml run --rm --no-deps php bin/console do:mi:mi --no-interaction
         - docker-compose -f docker-compose.yml -f docker-compose.test.yml run --rm --no-deps php bin/console do:sc:va
         - docker-compose -f docker-compose.yml -f docker-compose.test.yml run --rm --no-deps -u root php php bin/phpunit
+
+release:
+    stage: build
+    when: manual
+    only:
+        - master
+    variables:
+        CI_REGISTRY_IMAGE: hub.retailcrm.pro/modules/stripe
+        CI_REGISTRY: hub.retailcrm.pro
+    script:
+        - echo -e "machine gitlab.skillum.ru\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > .netrc
+
+        - docker-compose build php node
+
+        - docker-compose run -e APP_ENV=prod -e APP_DEBUG=0 --rm --no-deps -u root php /usr/local/bin/composer --no-interaction install --prefer-dist --no-dev
+        - docker-compose run -e APP_ENV=prod -e APP_DEBUG=0 --rm --no-deps -u root php bin/console --env=prod fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
+
+        # build static
+        - docker-compose run --rm --no-deps node sh -c 'yarn install && yarn build'
+
+        # set/fix permissions
+        - docker-compose run --rm --no-deps -u root php chmod -R a-w /var/www/stripe
+        - docker-compose run --rm --no-deps -u root php chown -R www-data:www-data /var/www/stripe
+
+        - docker build -t $CI_REGISTRY_IMAGE -f services/php_prod/Dockerfile ./
+
+        - docker login ${CI_REGISTRY} -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASS}
+        - docker push $CI_REGISTRY_IMAGE:latest

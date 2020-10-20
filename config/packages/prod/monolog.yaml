@@ -1,5 +1,10 @@
 monolog:
     handlers:
+        network:
+            level: info
+            type: stream
+            path: "php://stdout"
+            channels: ["network"]
         main:
             type: fingers_crossed
             action_level: error
@@ -8,9 +13,17 @@ monolog:
             buffer_size: 50 # How many messages should be saved? Prevent memory leaks
         nested:
             type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            path: "php://stderr"
             level: debug
         console:
             type: console
             process_psr_3_messages: false
             channels: ["!event", "!doctrine"]
+        deprecation:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+        deprecation_filter:
+            type: filter
+            handler: deprecation
+            max_level: info
+            channels: ["php"]
