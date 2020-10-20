@@ -10,12 +10,6 @@ use App\Service\StripeManager as BaseStripeManager;
 use Ramsey\Uuid\Uuid;
 use Stripe\StripeClient;
 
-//use YandexCheckout\Client;
-//use YandexCheckout\Model\PaymentInterface;
-//use YandexCheckout\Request\Payments\CreatePaymentRequest;
-//use YandexCheckout\Request\Payments\PaymentResponse;
-//use YandexCheckout\Request\Refunds\RefundResponse;
-
 class StripeManager extends BaseStripeManager
 {
     public function getAccountInfo(Account $account)
@@ -63,9 +57,6 @@ class StripeManager extends BaseStripeManager
         CreatePayment $createPayment,
         string $paymentUuid
     ): Payment {
-        $fp = fopen('/var/www/stripe/log.txt', 'a+');
-        fwrite($fp, "MOCK StripeManager::createPayment\n");
-
         $payment = new Payment($account);
         $payment
             ->setId('pi_' . Uuid::uuid4()->toString())
@@ -89,9 +80,6 @@ class StripeManager extends BaseStripeManager
 
     public function cancelPayment(Payment $payment): bool
     {
-        $fp = fopen('/var/www/stripe/log.txt', 'a+');
-        fwrite($fp, "MOCK StripeManager::cancelPayment\n");
-
         $payment
             ->setStatus(self::STATUS_PAYMENT_CANCELED)
             ->setPaid(false)
@@ -108,9 +96,6 @@ class StripeManager extends BaseStripeManager
      */
     public function capturePayment(Payment $payment): bool
     {
-        $fp = fopen('/var/www/stripe/log.txt', 'a+');
-        fwrite($fp, "MOCK StripeManager::capturePayment\n");
-
         $payment
             ->setStatus(self::STATUS_PAYMENT_SUCCEEDED)
             ->setPaid(true)
@@ -125,17 +110,11 @@ class StripeManager extends BaseStripeManager
 
     public function updatePayment(Payment $payment)
     {
-        $fp = fopen('/var/www/stripe/log.txt', 'a+');
-        fwrite($fp, "MOCK StripeManager::updatePayment\n");
-
         return true;
     }
 
     public function getPaymentInfo(Payment $payment)
     {
-        $fp = fopen('/var/www/stripe/log.txt', 'a+');
-        fwrite($fp, "MOCK StripeManager::getPaymentInfo\n");
-
         $refunds = $this->em->getRepository(Refund::class)->findBy(['payment' => $payment]);
 
         $refundedAmount = array_reduce($refunds, function (float $carry, Refund $item) {
@@ -172,9 +151,6 @@ class StripeManager extends BaseStripeManager
      */
     public function refundPayment(Payment $payment, float $amount): Refund
     {
-        $fp = fopen('/var/www/stripe/log.txt', 'a+');
-        fwrite($fp, "MOCK StripeManager::refundPayment\n");
-
         $refundResponse = [
             'id' => 're_' . Uuid::uuid4()->toString(),
             'status' => 'succeeded',
@@ -195,9 +171,6 @@ class StripeManager extends BaseStripeManager
 
     public function createClientByToken(string $token): StripeClient
     {
-        $fp = fopen('/var/www/stripe/log.txt', 'a+');
-        fwrite($fp, "MOCK StripeManager::createClientByToken\n");
-
         return new class() extends StripeClient {
             public function me()
             {
