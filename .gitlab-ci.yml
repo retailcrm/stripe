@@ -39,7 +39,7 @@ release:
     only:
         - master
     variables:
-        CI_REGISTRY_IMAGE: hub.retailcrm.pro/modules/stripe
+        CI_REGISTRY_IMAGE: hub.retailcrm.pro/retailcrm/stripe
         CI_REGISTRY: hub.retailcrm.pro
     script:
         - echo -e "machine gitlab.skillum.ru\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > .netrc
