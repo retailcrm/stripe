@@ -29,13 +29,13 @@ class AccountListener implements EventSubscriber
     private $translator;
 
     public function __construct(
-        CRMConnectManager $connectManager,
-        SessionInterface $session,
-        TranslatorInterface $translator
+        CRMConnectManager $connectManager
+        //SessionInterface $session,
+        //TranslatorInterface $translator
     ) {
         $this->connectManager = $connectManager;
-        $this->session = $session;
-        $this->translator = $translator;
+        //$this->session = $session;
+        //$this->translator = $translator;
     }
 
     public function getSubscribedEvents()
@@ -71,7 +71,7 @@ class AccountListener implements EventSubscriber
 
             $integration->setActive((bool) $accountsCount);
             if (!$this->connectManager->sendModuleInCRM($integration)) {
-                $this->session->getFlashBag()->add('error', $this->translator->trans('flash.crm_not_save'));
+                //$this->session->getFlashBag()->add('error', $this->translator->trans('flash.crm_not_save'));
             }
 
             $em->flush();
