@@ -26,6 +26,9 @@ module:
     status:
         active: 'Módulo activo'
         inactive: 'Módulo no activo'
+    fields:
+        public_key: 'Clave pública'
+        secret_key: 'Clave secreta'
 
 flash:
     scs_saved: 'Guardado con éxito'

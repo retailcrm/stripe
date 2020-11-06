@@ -60,7 +60,7 @@
                             accent
                             :class="$style['add-form__label']"
                         >
-                            Публичный ключ
+                            {{ $t('module.fields.public_key') }}
                         </ui-text>
                         <ui-input
                             v-model="dataPublicKey"
@@ -75,7 +75,7 @@
                             accent
                             :class="$style['add-form__label']"
                         >
-                            Секретный ключ
+                            {{ $t('module.fields.secret_key') }}
                         </ui-text>
                         <ui-input
                             v-model="dataSecretKey"

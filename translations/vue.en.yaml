@@ -26,8 +26,13 @@ module:
     status:
         active: 'Module is active'
         inactive: 'Module is not active'
+    fields:
+        public_key: 'Publishable key'
+        secret_key: 'Secret key'
+
 flash:
     scs_saved: 'Saved successfully'
+
 button:
     account_refresh: Refresh
     account_delete: Delete
