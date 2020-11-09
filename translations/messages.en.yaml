@@ -1,5 +1,5 @@
 base:
-    title: Integration retailCRM with Stripe
+    title: 'Integration retailCRM with Stripe'
 api:
     order_description: 'Payment for order №'
     cancelation_detail: 'Cancelled by manager'

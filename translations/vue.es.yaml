@@ -6,7 +6,7 @@ base:
 module:
     connect:
         api_key: 'La clave API'
-        crm_url: 'url de CRM'
+        crm_url: 'URL de CRM'
         crm_url_placeholder: 'Por ejemplo, https://demo.retailcrm.pro'
         connect: 'Conectar'
     settings:
