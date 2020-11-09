@@ -79,7 +79,7 @@ class IntegrationTest extends AbstractApiTest
         $response = json_decode($client->getResponse()->getContent(), true);
         $this->assertSame(400, $client->getResponse()->getStatusCode());
         $this->assertFalse($response['success']);
-        $this->assertEquals('Некорректные данные в запросе', $response['errorMsg']);
+        $this->assertEquals('Invalid data in the request', $response['errorMsg']);
         $this->assertArrayHasKey('crmApiKey', $response['errors']);
         $this->assertCount(1, $response['errors']);
     }
