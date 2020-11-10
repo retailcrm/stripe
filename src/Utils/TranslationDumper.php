@@ -17,9 +17,8 @@ class TranslationDumper
         $this->params = $params;
     }
 
-    public function dump()
+    public function dump(string $locale = 'en')
     {
-        $locale = $this->params->get('locale');
         $translationPath = $this->params->get('kernel.project_dir') . \DIRECTORY_SEPARATOR . 'translations';
         $translations = [];
 

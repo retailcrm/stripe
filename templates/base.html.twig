@@ -19,7 +19,7 @@
                     window.flashMsg += "{{ message|e('js') }} ";
                 {% endfor %}
                 window.app_locale = "{{ app.request.locale }}";
-                window.app_translations = {{ translation_dumper.dump()|json_encode|raw }};
+                window.app_translations = {{ translation_dumper.dump(app.request.locale)|json_encode|raw }};
             </script>
         {% endblock %}
 
