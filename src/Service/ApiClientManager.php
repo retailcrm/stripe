@@ -34,7 +34,7 @@ class ApiClientManager
 
         $response = $this->pinbaService->timerHandler(
             [
-                'api' => 'retailCrm',
+                'api' => 'RetailCRM',
                 'method' => 'credentials',
             ],
             static function () use ($client) {

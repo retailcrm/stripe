@@ -1,6 +1,6 @@
 <template>
     <ui-integration-layout
-        doc-link="https://www.retailcrm.ru/docs"
+        doc-link="https://docs.retailcrm.pro/Users/Integration"
         :integration="this.$t('base.integrations')"
         :integration-value="this.$t('base.curIntegration')"
         :integration-link="urls.crmIntegrations"

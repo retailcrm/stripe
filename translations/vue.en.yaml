@@ -1,5 +1,5 @@
 base:
-    title: 'Integration retailCRM with Stripe'
+    title: 'Integration RetailCRM with Stripe'
     integrations: 'Integrations'
     curIntegration: 'Stripe'
     help: 'Ask for help'

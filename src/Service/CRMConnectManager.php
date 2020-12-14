@@ -110,7 +110,7 @@ class CRMConnectManager
 
         $response = $this->pinbaService->timerHandler(
             [
-                'api' => 'retailCrm',
+                'api' => 'RetailCRM',
                 'method' => 'paymentCheckInvoice',
             ],
             static function () use ($client, $payment) {
@@ -136,7 +136,7 @@ class CRMConnectManager
 
         $response = $this->pinbaService->timerHandler(
             [
-                'api' => 'retailCrm',
+                'api' => 'RetailCRM',
                 'method' => 'paymentUpdateInvoice',
             ],
             static function () use ($client, $params) {
@@ -250,7 +250,7 @@ class CRMConnectManager
         try {
             $response = $this->pinbaService->timerHandler(
                 [
-                    'api' => 'retailCrm',
+                    'api' => 'RetailCRM',
                     'method' => 'integrationModulesEdit',
                 ],
                 static function () use ($client, $data) {

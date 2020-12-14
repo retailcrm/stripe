@@ -22,7 +22,7 @@ api:
         invalid_request_data: 'Datos incorrectos en la consulta'
         invalid_fiscal_data: 'Datos incorrectos para la fiscalización'
 flash:
-    crm_not_save: 'Las configuraciones no se actualizaron correctamente en CRM'
+    crm_not_save: 'Las configuraciones no se actualizaron correctamente en RetailCRM'
     invalid_get_token: 'No se pudo obtener el token.'
     account_already_deactivated: 'La tienda ya está desactivada.'
     account_error_deactivated: 'Error en la desactivación de la tienda.'

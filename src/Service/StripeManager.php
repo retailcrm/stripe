@@ -126,7 +126,7 @@ class StripeManager
             //'customer' => 'id',
             'payment_method_types' => ['card'],
             'payment_intent_data' => [
-                'description' => 'RetailCrm order ' . $createPayment->getOrderNumber(),
+                'description' => 'RetailCRM order ' . $createPayment->getOrderNumber(),
                 'capture_method' => $account->isApproveManually() ? 'manual' : 'automatic',
                 'receipt_email' => $createPayment->getCustomer()->getEmail(),
                 'metadata' => $metadata,

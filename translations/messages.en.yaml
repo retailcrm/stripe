@@ -1,5 +1,5 @@
 base:
-    title: 'Integration retailCRM with Stripe'
+    title: 'Integration RetailCRM with Stripe'
 api:
     order_description: 'Payment for order №'
     cancelation_detail: 'Cancelled by manager'
@@ -22,7 +22,7 @@ api:
         invalid_request_data: 'Invalid data in the request'
         invalid_fiscal_data: 'Invalid data for fiscalization'
 flash:
-    crm_not_save: 'Updating settings failed in CRM'
+    crm_not_save: 'Updating settings failed in RetailCRM'
     invalid_get_token: 'Failed to get a token.'
     account_already_deactivated: 'Store has already been deactivated.'
     account_error_deactivated: 'An error occurred while deactivating the store.'
