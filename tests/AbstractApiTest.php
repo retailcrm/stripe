@@ -17,6 +17,6 @@ abstract class AbstractApiTest extends BaseAppTest
     protected function checkSendInModuleError(array $response)
     {
         $this->assertFalse($response['success']);
-        $this->assertEquals('Updating settings failed in CRM', $response['errorMsg']);
+        $this->assertEquals('Updating settings failed in RetailCRM', $response['errorMsg']);
     }
 }
