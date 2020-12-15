@@ -3,6 +3,7 @@ base:
     integrations: 'Integrations'
     curIntegration: 'Stripe'
     help: 'Ask for help'
+    documentation: 'Setup documentation'
 module:
     connect:
         api_key: 'API-key'
