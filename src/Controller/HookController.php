@@ -112,6 +112,9 @@ class HookController extends AbstractController implements LoggableController
 
         /** @var Payment|null $payment */
         $payment = $this->em->getRepository(Payment::class)->find($paymentIntent['id']);
+        if (!$payment) {
+            return new Response('someone else\'s payment');
+        }
 
         if (!$this->createNotification($request, $payment, $event)) {
             return new Response();
@@ -170,6 +173,9 @@ class HookController extends AbstractController implements LoggableController
 
         /** @var Payment|null $payment */
         $payment = $this->em->getRepository(Payment::class)->find($paymentIntent['id']);
+        if (!$payment) {
+            return new Response('someone else\'s payment');
+        }
 
         if (!$this->createNotification($request, $payment, $event)) {
             return new Response();
@@ -200,6 +206,9 @@ class HookController extends AbstractController implements LoggableController
 
         /** @var Payment|null $payment */
         $payment = $this->em->getRepository(Payment::class)->find($paymentIntent['id']);
+        if (!$payment) {
+            return new Response('someone else\'s payment');
+        }
 
         if (!$this->createNotification($request, $payment, $event)) {
             return new Response();
@@ -225,6 +234,9 @@ class HookController extends AbstractController implements LoggableController
 
         /** @var Payment|null $payment */
         $payment = $this->em->getRepository(Payment::class)->find($charge['payment_intent']);
+        if (!$payment) {
+            return new Response('someone else\'s payment');
+        }
 
         if (StripeManager::STATUS_PAYMENT_CANCELED === $payment->getStatus()) {
             return new Response();
