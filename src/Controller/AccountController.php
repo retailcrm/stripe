@@ -107,7 +107,7 @@ class AccountController extends AbstractController
             ->setIntegration($integration)
             ->setPublicKey($addAccount->getPublicKey())
             ->setSecretKey($addAccount->getSecretKey())
-            ->setTest(false)
+            ->setTest(false !== mb_strpos($addAccount->getPublicKey(), 'test'))
             ->setDeactivatedAt(null)
         ;
 
@@ -117,7 +117,6 @@ class AccountController extends AbstractController
             $account->setAccountId($stripeAccount['id']);
             $accountName = $stripeAccount['settings']['dashboard']['display_name'];
             $account->setName($accountName ? mb_substr($accountName, 0, 255) : 'Account: ' . $stripeAccount->id);
-            $account->setTest(!$stripeAccount['charges_enabled']);
         } catch (\Exception $e) {
             return $this->responseManager->apiExceptionJsonResponse($e);
         }

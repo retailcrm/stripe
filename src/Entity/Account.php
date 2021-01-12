@@ -17,9 +17,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *     name="i_account",
  *     indexes={
  *         @ORM\Index(name="i_integration_id_idx", columns={"integration_id"})
- *     },
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="i_integration_id_account_id_idx", columns={"integration_id","account_id"})
  *     }
  * )
  * @ORM\HasLifecycleCallbacks()
@@ -144,8 +141,9 @@ class Account
             'maxMessage' => 'error.account.name.length',
         ]));
         $metadata->addConstraint(new UniqueEntity([
-            'fields' => ['integration', 'accountId'],
+            'fields' => ['integration', 'accountId', 'deactivatedAt'],
             'message' => 'error.account.uniq',
+            'ignoreNull' => false,
         ]));
     }
 
