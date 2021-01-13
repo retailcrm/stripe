@@ -34,6 +34,7 @@ class CRMConnectManager
 
     public const CRM_INVOICE_STATUS_MAP = [
         StripeManager::STATUS_PAYMENT_PENDING => 'pending',
+        StripeManager::STATUS_PAYMENT_PENDING_OLD => 'pending',
         StripeManager::STATUS_PAYMENT_WAITING_CAPTURE => 'waitingForCapture',
         StripeManager::STATUS_PAYMENT_SUCCEEDED => 'succeeded',
         StripeManager::STATUS_PAYMENT_CANCELED => 'canceled',

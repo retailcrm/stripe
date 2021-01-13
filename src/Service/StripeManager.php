@@ -15,6 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class StripeManager
 {
     public const STATUS_PAYMENT_PENDING = 'requires_payment_method';
+    public const STATUS_PAYMENT_PENDING_OLD = 'requires_source';
     public const STATUS_PAYMENT_WAITING_CAPTURE = 'requires_capture';
     public const STATUS_PAYMENT_SUCCEEDED = 'succeeded';
     public const STATUS_PAYMENT_CANCELED = 'canceled';
@@ -22,6 +23,7 @@ class StripeManager
 
     public const STATUSES = [
         self::STATUS_PAYMENT_PENDING => 'Создан',
+        self::STATUS_PAYMENT_PENDING_OLD => 'Создан',
         self::STATUS_PAYMENT_WAITING_CAPTURE => 'Оплата ожидает подтверждения',
         self::STATUS_PAYMENT_SUCCEEDED => 'Успешная оплата',
         self::STATUS_PAYMENT_CANCELED => 'Отмена',

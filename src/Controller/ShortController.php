@@ -46,7 +46,10 @@ class ShortController extends AbstractController
 
         $payment = $this->getDoctrine()->getRepository(Payment::class)->findOneBy([
             'url' => $url,
-            'status' => StripeManager::STATUS_PAYMENT_PENDING,
+            'status' => [
+                StripeManager::STATUS_PAYMENT_PENDING,
+                StripeManager::STATUS_PAYMENT_PENDING_OLD,
+            ],
         ]);
 
         if (!$payment) {
