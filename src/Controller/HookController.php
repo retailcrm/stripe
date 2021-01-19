@@ -182,11 +182,10 @@ class HookController extends AbstractController implements LoggableController
         }
         $this->em->flush();
 
-        $wasPaid = $payment->isPaid();
         $this->updatePayment($payment, $paymentIntent);
 
         try {
-            $this->crmConnectManager->updateInvoice($payment, $wasPaid);
+            $this->crmConnectManager->updateInvoice($payment, true);
         } catch (CurlException | RetailcrmApiException $e) {
             return new Response('', 500);
         }
@@ -292,7 +291,10 @@ class HookController extends AbstractController implements LoggableController
 
     private function updatePayment(Payment $payment, $paymentIntent)
     {
-        $charge = current($paymentIntent['charges']['data']);
+        $charge = [];
+        if ($paymentIntent['charges']['data']) {
+            $charge = current($paymentIntent['charges']['data']);
+        }
         $cancellationDetailsReason = $payment->getCancellationDetails();
 
         if (isset($paymentIntent['cancellation_reason']) && !empty($paymentIntent['cancellation_reason'])) {
@@ -301,8 +303,11 @@ class HookController extends AbstractController implements LoggableController
             );
         }
 
-        $capturedAt = new \DateTime();
-        $capturedAt->setTimestamp($charge['created']);
+        $capturedAt = null;
+        if (isset($charge['created'])) {
+            $capturedAt = new \DateTime();
+            $capturedAt->setTimestamp($charge['created']);
+        }
 
         $expiresAt = null;
         if (StripeManager::STATUS_PAYMENT_WAITING_CAPTURE === $paymentIntent['status']
@@ -314,11 +319,11 @@ class HookController extends AbstractController implements LoggableController
         $payment
             ->setAmount($paymentIntent['amount'] / 100)
             ->setStatus($paymentIntent['status'])
-            ->setPaid($charge['paid'])
+            ->setPaid(isset($charge['paid']) ? $charge['paid'] : false)
             ->setExpiresAt($expiresAt)
             ->setCapturedAt($capturedAt)
             ->setCancellationDetails($cancellationDetailsReason)
-            ->setRefundable(!$charge['refunded'])
+            ->setRefundable(isset($charge['refunded']) ? !$charge['refunded'] : false)
         ;
     }
 }
