@@ -251,7 +251,17 @@ class HookController extends AbstractController implements LoggableController
             return new Response();
         }
 
-        $refundResponse = current($charge['refunds']['data']);
+        if (isset($charge['refunds']['data']) && is_array($charge['refunds']['data'])) {
+            $refundResponse = current($charge['refunds']['data']);
+        } elseif (is_array($charge['refunds'])) {
+            $refundResponse = current($charge['refunds']);
+        } else {
+            return new Response();
+        }
+
+        if (empty($refundResponse['id'])) {
+            return new Response('there is no refund id');
+        }
 
         $refund = $this->stripeManager->createRefundIfNotExists($refundResponse, $payment, true);
         $this->em->flush();
