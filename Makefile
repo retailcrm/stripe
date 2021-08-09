@@ -55,6 +55,12 @@ run_fix:
 	@echo "==> Run Fix"
 	@$(COMMAND) -f docker-compose.test.yml run --rm --no-deps php vendor/bin/php-cs-fixer fix
 
+setup_test:
+	@echo "==> Create database & schema test"
+	-$(COMMAND) -f docker-compose.test.yml run --rm --no-deps php bin/console do:da:dr --force
+	@$(COMMAND) -f docker-compose.test.yml run --rm --no-deps php bin/console do:da:cr
+	@$(COMMAND) -f docker-compose.test.yml run --rm --no-deps php bin/console do:sc:cr
+
 run_test:
 	@echo "==> Run Tests"
 	@$(COMMAND) -f docker-compose.test.yml run --rm --no-deps -u root php php bin/phpunit $(TESTPATH)
