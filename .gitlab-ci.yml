@@ -5,7 +5,7 @@ before_script:
     - >
         echo > auth.json -e '{
           "http-basic":{
-            "gitlab.skillum.ru": {
+            "gitlab.retailcrm.tech": {
               "username":"gitlab-ci-token",
               "password": "'${CI_JOB_TOKEN}'"
             }
@@ -22,7 +22,7 @@ phpunit:
         - echo "prod"
         - docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
         - docker-compose -f docker-compose.yml -f docker-compose.test.yml run --rm --no-deps -u root php /usr/local/bin/composer --no-interaction install --prefer-dist -o --no-ansi
-        - echo -e "machine gitlab.skillum.ru\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > .netrc
+        - echo -e "machine gitlab.retailcrm.tech\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > .netrc
         - docker-compose -f docker-compose.yml -f docker-compose.test.yml run --rm --no-deps node yarn install
         - docker-compose -f docker-compose.yml -f docker-compose.test.yml run --rm --no-deps php bin/console assets:install public
         - docker-compose -f docker-compose.yml -f docker-compose.test.yml run --rm --no-deps -u root php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
@@ -43,7 +43,7 @@ release:
         CI_REGISTRY_IMAGE: hub.retailcrm.pro/retailcrm/stripe
         CI_REGISTRY: hub.retailcrm.pro
     script:
-        - echo -e "machine gitlab.skillum.ru\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > .netrc
+        - echo -e "machine gitlab.retailcrm.tech\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > .netrc
 
         - docker-compose build php node
 

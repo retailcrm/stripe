@@ -7861,12 +7861,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@gitlab.skillum.ru:retailcrm/php-code-style.git",
+                "url": "git@gitlab.retailcrm.tech:retailcrm/php-code-style.git",
                 "reference": "d393d1a4dfbe74a521c6127cb7457474d9b1154e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.skillum.ru/api/v4/projects/retailcrm%2Fphp-code-style/repository/archive.zip?sha=d393d1a4dfbe74a521c6127cb7457474d9b1154e",
+                "url": "https://gitlab.retailcrm.tech/api/v4/projects/retailcrm%2Fphp-code-style/repository/archive.zip?sha=d393d1a4dfbe74a521c6127cb7457474d9b1154e",
                 "reference": "d393d1a4dfbe74a521c6127cb7457474d9b1154e",
                 "shasum": ""
             },

@@ -7184,9 +7184,9 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-"vue-ui-kit@git+https://gitlab.skillum.ru/ui-kit/core.git":
+"vue-ui-kit@git+https://gitlab.retailcrm.tech/ui-kit/core.git":
   version "2.0.7"
-  resolved "git+https://gitlab.skillum.ru/ui-kit/core.git#97c9d534a5c5a89c7a9e5a679ad258034d96ed2b"
+  resolved "git+https://gitlab.retailcrm.tech/ui-kit/core.git#97c9d534a5c5a89c7a9e5a679ad258034d96ed2b"
   dependencies:
     core-js "^2.6.5"
     v-tooltip "^2.0.2"

@@ -55,7 +55,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@gitlab.skillum.ru:retailcrm/php-code-style.git"
+            "url": "git@gitlab.retailcrm.tech:retailcrm/php-code-style.git"
         }
     ],
     "config": {
