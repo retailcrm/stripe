@@ -25,6 +25,7 @@ class IntegrationModule
     {
         $this->setAvailableCountries($availableCountries);
         $this->setCode(CRMConnectManager::MODULE_CODE);
+        $this->setIntegrationCode(CRMConnectManager::MODULE_CODE);
     }
 
     public function getCode(): string

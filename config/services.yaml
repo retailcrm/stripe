@@ -3,9 +3,8 @@
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
-parameters:
-    cdn_assets_base_url: //s3-o1.retailcrm.tech/eu-central-1/retailcrm-static
-    locales: ['en', 'es', 'ru']
+imports:
+    - { resource: parameters.yaml }
 
 services:
     # default configuration for services in *this* file
@@ -59,6 +58,10 @@ services:
     Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler:
         arguments:
             - '@Redis'
+
+    App\ArgumentResolver\RetailcrmCallbackResolver:
+        tags:
+            - { name: controller.argument_value_resolver, priority: 50 }
 
     App\EventSubscriber\LoggerSubscriber:
         tags:

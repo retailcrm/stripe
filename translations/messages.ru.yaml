@@ -1,5 +1,5 @@
 base:
-    title: 'Интеграция Stripe и RetailCRM'
+    title: 'Интеграция Stripe и %brand%'
 api:
     order_description: 'Оплата по заказу №'
     cancelation_detail: 'Отменено менеджером'

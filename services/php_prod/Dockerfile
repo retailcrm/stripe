@@ -1,4 +1,4 @@
-FROM php:7.3-fpm-stretch
+FROM php:7.4-fpm-buster
 
 ENV LANG "C.UTF-8"
 ENV LANGUAGE "C.UTF-8"
@@ -17,9 +17,7 @@ ENV PHPIZE_DEPS \
 		re2c \
 		wget
 
-RUN sed -i "s/stretch main/stretch main contrib non-free/" /etc/apt/sources.list \
-    && sed -i '/stretch-updates/d' /etc/apt/sources.list \
-    && apt-get update \
+RUN apt-get update \
     && apt-get install -y \
     $PHPIZE_DEPS \
     git \
@@ -27,6 +25,7 @@ RUN sed -i "s/stretch main/stretch main contrib non-free/" /etc/apt/sources.list
     bzip2 \
     libbz2-dev \
     unzip \
+    libonig-dev \
     libzip-dev \
     libxml2-dev \
     libfreetype6-dev \
@@ -37,7 +36,7 @@ RUN sed -i "s/stretch main/stretch main contrib non-free/" /etc/apt/sources.list
     libxrender1 libfontconfig \
     \
     && docker-php-ext-install mbstring bz2 zip \
-    && docker-php-ext-configure gd -with-freetype-dir=/usr/include/ -with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd -with-freetype=/usr/include/ -with-jpeg=/usr/include/ \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/include/postgresql/ \
     && docker-php-ext-install gd pgsql pdo_pgsql bcmath intl \
     && pecl install apcu redis \

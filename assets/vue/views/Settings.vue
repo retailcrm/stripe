@@ -7,6 +7,7 @@
         :integration-link="urls.crmIntegrations"
         :integration-value-link="urls.crmModule"
         :main-link="urls.main"
+        :brand="brand"
     >
         <template
             v-if="hasIntegration"
@@ -106,6 +107,9 @@
             }
         },
         computed: {
+            brand() {
+                return window.app_brand;
+            },
             isLoading() {
                 return this.$store.getters["settings/isLoading"];
             },

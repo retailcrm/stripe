@@ -3,7 +3,7 @@ index:
     controller: App\Controller\IntegrationController::index
     methods: GET
     requirements:
-        vueRouting: '^(?!apihook|oauth-hook|connect|pay|integration|add|activity|test|account|_(profiler|wdt)).*'
+        vueRouting: '^(?!apihook|oauth-hook|connect|pay|integration|add|activity|test|account|settings|simple|_(profiler|wdt)).*'
 
 stripe_settings:
     path: /settings/{slug}
@@ -104,6 +104,16 @@ crm_connection_activity:
     path:  /activity
     controller: App\Controller\CRMConnectController::activity
     format: json
+    methods: POST
+
+crm_simple_connect_config:
+    path: /simple/connect
+    controller: App\Controller\RegisterController::config
+    methods: GET
+
+crm_simple_connect_register:
+    path: /simple/connect
+    controller: App\Controller\RegisterController::register
     methods: POST
 
 short_url:

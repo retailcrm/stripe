@@ -51,16 +51,23 @@ class StripeManager
      */
     private $logger;
 
+    /**
+     * @var CRMConnectManager
+     */
+    private $connectManager;
+
     public function __construct(
         EntityManagerInterface $em,
         TranslatorInterface $translator,
         PinbaService $pinbaService,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        CRMConnectManager $connectManager
     ) {
         $this->em = $em;
         $this->translator = $translator;
         $this->pinbaService = $pinbaService;
         $this->logger = $logger;
+        $this->connectManager = $connectManager;
     }
 
     public function getAccountInfo(Account $account)
@@ -128,7 +135,11 @@ class StripeManager
             //'customer' => 'id',
             'payment_method_types' => ['card'],
             'payment_intent_data' => [
-                'description' => 'RetailCRM order ' . $createPayment->getOrderNumber(),
+                'description' => sprintf(
+                    '%s order %s',
+                    'simla' == $this->connectManager->getBrand($account->getIntegration()) ? 'Simla' : 'RetailCRM',
+                    $createPayment->getOrderNumber()
+                ),
                 'capture_method' => $account->isApproveManually() ? 'manual' : 'automatic',
                 'receipt_email' => $createPayment->getCustomer()->getEmail(),
                 'metadata' => $metadata,

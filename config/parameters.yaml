@@ -1,0 +1,15 @@
+parameters:
+    cdn_assets_base_url: //s3-o1.retailcrm.tech/eu-central-1/retailcrm-static
+    locales: ['en', 'es', 'ru']
+    register:
+        secret: '%env(resolve:ONE_STEP_CONNECTION_SECRET)%'
+        api-scopes:
+            - 'integration_read'
+            - 'integration_write'
+            - 'payments_read'
+            - 'payments_write'
+            - 'reference_read'
+            - 'store_read'
+    argument_resolver:
+        retailcrm_callback:
+            register: App\Dto\Register\RegisterRequest

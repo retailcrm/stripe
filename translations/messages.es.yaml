@@ -1,5 +1,5 @@
 base:
-    title: 'Integración de Stripe con RetailCRM'
+    title: 'Integración de Stripe con %brand%'
 api:
     order_description: 'Pago del pedido №'
     cancelation_detail: 'Cancelado por el mánager'

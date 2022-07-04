@@ -4,24 +4,29 @@
 
 **Доступ к защищенным репозиториям**
 
-Создать в корне файл `auth.json` с [токеном доступа](https://gitlab.retailcrm.tech/-/profile/personal_access_tokens) с правами `api` + `read_repository`
+Скопировать файл `.npmrc` и указать в нем [токен доступа](https://gitlab.retailcrm.tech/-/profile/personal_access_tokens) с правами `api` + `read_repository`
+
+```bash
+$ cp .npmrc.dist .npmrc
+```
 
 **Запуск рабочего окружения**
 
 ```bash
-$ make start
-$ make deps
-$ make create_database
-$ make assets
-$ make js_routing
-$ make encore
+$ make start            # build and run docker-containers
+$ make deps             # install php and js dependencies
+$ make create_database  # force recreate new database
+$ make assets           # install symfony assets
+$ make js_routing       # dump symfony routes for vue.js
+$ make encore           # build js files for vue.js
 ```
 
 
-В дельнейшем запуск можно осуществить командой
+В дельнейшем, запуск и остановку контейнеров можно осуществить командами:
 
 ```bash
 $ make start
+$ make stop
 ```
 
 ## Тестирование

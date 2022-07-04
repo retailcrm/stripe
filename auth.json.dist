@@ -1,3 +1,6 @@
 {
-    "gitlab-domains": ["gitlab.com", "gitlab.skillum.ru"]
+    "gitlab-domains": ["gitlab.com", "gitlab.skillum.ru"],
+    "gitlab-token": {
+        "gitlab.skillum.ru": "xxxxxxxxxxxxxxxxxxxx"
+    }
 }

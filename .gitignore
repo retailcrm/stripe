@@ -19,6 +19,7 @@
 .yarnrc
 *.DS_Store
 auth.json
+.npmrc
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/

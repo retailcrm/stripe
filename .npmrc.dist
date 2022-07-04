@@ -1,0 +1,3 @@
+@ui-kit:registry=https://gitlab.retailcrm.tech/api/v4/packages/npm/
+//gitlab.retailcrm.tech/api/v4/packages/npm/:_authToken=xxxxxxxxxxxxxxxxxxxx
+//gitlab.retailcrm.tech/api/v4/projects/:_authToken=xxxxxxxxxxxxxxxxxxxx

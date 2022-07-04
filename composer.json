@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/doctrine-migrations-bundle": "^2.0",
@@ -50,7 +50,8 @@
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "^5.1",
         "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*"
+        "symfony/test-pack": "*",
+        "ext-json": "*"
     },
     "repositories": [
         {

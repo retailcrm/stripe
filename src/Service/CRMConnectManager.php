@@ -10,10 +10,10 @@ use App\Entity\Model\UpdateInvoiceRequest;
 use App\Entity\Payment;
 use App\Entity\Refund;
 use App\Exception\CreateUpdateInvoiceException;
+use App\Factory\ApiClientFactory;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerInterface;
 use Psr\Log\LoggerInterface;
-use RetailCrm\ApiClient;
 use RetailCrm\Exception\CurlException;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -25,6 +25,11 @@ class CRMConnectManager
     public const MODULE_NAME = 'Stripe';
     public const MODULE_LOGO = '/build/images/stripe_logo.svg';
     public const MODULE_CODE = 'stripe';
+
+    public const BRANDS = [
+        'simla',
+        'retailcrm',
+    ];
 
     public const PAYMENT_CREATE_METHOD = 'create';
     public const PAYMENT_APPROVE_METHOD = 'approve';
@@ -77,6 +82,11 @@ class CRMConnectManager
     private $logger;
 
     /**
+     * @var ApiClientFactory
+     */
+    private $apiClientFactory;
+
+    /**
      * CRMConnectManager constructor.
      */
     public function __construct(
@@ -85,6 +95,7 @@ class CRMConnectManager
         SerializerInterface $serializer,
         ParameterBagInterface $parameterBag,
         ValidatorInterface $validator,
+        ApiClientFactory $apiClientFactory,
         PinbaService $pinbaService,
         LoggerInterface $logger
     ) {
@@ -93,6 +104,7 @@ class CRMConnectManager
         $this->serializer = $serializer;
         $this->parameterBag = $parameterBag;
         $this->validator = $validator;
+        $this->apiClientFactory = $apiClientFactory;
         $this->pinbaService = $pinbaService;
         $this->logger = $logger;
     }
@@ -107,7 +119,7 @@ class CRMConnectManager
     public function checkInvoice(Payment $payment): bool
     {
         $integration = $payment->getAccount()->getIntegration();
-        $client = $this->createApiClient($integration);
+        $client = $this->apiClientFactory->create($integration);
 
         $response = $this->pinbaService->timerHandler(
             [
@@ -132,7 +144,7 @@ class CRMConnectManager
     public function updateInvoice(Payment $payment, bool $withStatus = true, ?Refund $refund = null): bool
     {
         $integration = $payment->getAccount()->getIntegration();
-        $client = $this->createApiClient($integration);
+        $client = $this->apiClientFactory->create($integration);
         $params = $this->createUpdateInvoiceRequest($payment, $withStatus, $refund);
 
         $response = $this->pinbaService->timerHandler(
@@ -200,6 +212,17 @@ class CRMConnectManager
         return $this->serializer->toArray($updateInvoiceRequest);
     }
 
+    public function getBrand(Integration $integration): ?string
+    {
+        $brand = null;
+        $domain = explode('.', $integration->getCrmUrl());
+        if (3 == count($domain) && in_array($domain[1], self::BRANDS)) {
+            $brand = $domain[1];
+        }
+
+        return $brand;
+    }
+
     private function createModule(Integration $integration): IntegrationModule
     {
         $accountUrl = $this->urlGenerator->generate(
@@ -246,8 +269,8 @@ class CRMConnectManager
     private function sendCrmRequest(IntegrationModule $module, Integration $integration): bool
     {
         $data = $this->serializer->toArray($module);
+        $client = $this->apiClientFactory->create($integration);
 
-        $client = $this->createApiClient($integration);
         try {
             $response = $this->pinbaService->timerHandler(
                 [
@@ -274,13 +297,5 @@ class CRMConnectManager
             self::PAYMENT_STATUS_METHOD => $this->urlGenerator->generate('crm_payment_status', [], UrlGeneratorInterface::ABSOLUTE_PATH),
             self::PAYMENT_REFUND_METHOD => $this->urlGenerator->generate('crm_payment_refund', [], UrlGeneratorInterface::ABSOLUTE_PATH),
         ];
-    }
-
-    private function createApiClient(Integration $integration, string $version = ApiClient::V5): ApiClient
-    {
-        $client = new ApiClient($integration->getCrmUrl(), $integration->getCrmApiKey(), $version);
-        $client->setLogger($this->logger);
-
-        return $client;
     }
 }

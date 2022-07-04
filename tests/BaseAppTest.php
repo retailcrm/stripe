@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use App\Entity\Integration;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
@@ -47,8 +48,7 @@ abstract class BaseAppTest extends WebTestCase
             $loader->addFixture($fixture);
         }
 
-        /** @var EntityManagerInterface $em */
-        $em = self::$container->get(EntityManagerInterface::class);
+        $em = $this->getEntityManager();
 
         $purger = new ORMPurger($em);
         $executor = new ORMExecutor($em, $purger);
@@ -68,5 +68,24 @@ abstract class BaseAppTest extends WebTestCase
             $mockCRMConnectManager->method($method)->willReturn($return);
         }
         $container->set($containerId, $mockCRMConnectManager);
+    }
+
+    protected static function createClient(array $options = [], array $server = [])
+    {
+        self::ensureKernelShutdown();
+
+        return parent::createClient($options, $server);
+    }
+
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        return self::$container->get(EntityManagerInterface::class);
+    }
+
+    protected function getConnection(): Integration
+    {
+        return $this->getEntityManager()
+            ->getRepository(Integration::class)
+            ->findOneBy(['crmUrl' => 'https://demo.retailcrm.ru']);
     }
 }

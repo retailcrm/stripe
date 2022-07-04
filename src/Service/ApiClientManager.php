@@ -4,8 +4,7 @@ namespace App\Service;
 
 use App\Entity\Integration;
 use App\Exception\RetailcrmApiException;
-use Psr\Log\LoggerInterface;
-use RetailCrm\ApiClient;
+use App\Factory\ApiClientFactory;
 
 class ApiClientManager
 {
@@ -15,14 +14,16 @@ class ApiClientManager
     private $pinbaService;
 
     /**
-     * @var LoggerInterface
+     * @var ApiClientFactory
      */
-    private $logger;
+    private $apiClientFactory;
 
-    public function __construct(PinbaService $pinbaService, LoggerInterface $logger)
-    {
+    public function __construct(
+        PinbaService $pinbaService,
+        ApiClientFactory $apiClientFactory
+    ) {
         $this->pinbaService = $pinbaService;
-        $this->logger = $logger;
+        $this->apiClientFactory = $apiClientFactory;
     }
 
     /**
@@ -30,7 +31,7 @@ class ApiClientManager
      */
     public function getCredentials(Integration $integration): array
     {
-        $client = $this->createClient($integration);
+        $client = $this->apiClientFactory->create($integration);
 
         $response = $this->pinbaService->timerHandler(
             [
@@ -47,25 +48,5 @@ class ApiClientManager
         }
 
         return $response->offsetGet('credentials');
-    }
-
-    /**
-     * @throws RetailcrmApiException
-     */
-    private function createClient(Integration $integration, string $version = ApiClient::V5): ApiClient
-    {
-        if (!$integration->getCrmUrl() || !$integration->getCrmApiKey()) {
-            throw new RetailcrmApiException('Empty Api Key');
-        }
-
-        $client = new ApiClient(
-            $integration->getCrmUrl(),
-            $integration->getCrmApiKey(),
-            $version
-        );
-
-        $client->setLogger($this->logger);
-
-        return $client;
     }
 }

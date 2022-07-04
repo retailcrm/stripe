@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
+        {% set app_brand = brand is defined ? brand
+            : (app.request.locale is defined and app.request.locale == 'ru' ? 'retailcrm' : 'simla') -%}
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <title>{% block title %}{{ 'base.title'|trans }}{% endblock %}</title>
+        <title>{% block title %}{{ 'base.title'|trans({'%brand%': (app_brand == 'simla' ? 'Simla.com' : 'RetailCRM')}) }}{% endblock %}</title>
         <meta name="theme-color" content="#0068FF">
-        <link type="image/x-icon" rel="shortcut icon" href="{{ asset('branding/retailcrm/favicon/favicon.ico', 'cdn_package') }}">
-        <link rel="icon" href="{{ asset('branding/retailcrm/favicon/favicon.svg', 'cdn_package') }}">
-        <link rel="apple-touch-icon" href="{{ asset('branding/retailcrm/favicon/apple-touch-icon.png', 'cdn_package') }}">
-        <link rel="manifest" href="{{ asset('branding/retailcrm/favicon/manifest.json', 'cdn_package') }}">
+        <link type="image/x-icon" rel="shortcut icon" href="{{ asset('branding/'~app_brand~'/favicon/favicon.ico', 'cdn_package') }}">
+        <link rel="icon" href="{{ asset('branding/'~app_brand~'/favicon/favicon.svg', 'cdn_package') }}">
+        <link rel="apple-touch-icon" href="{{ asset('branding/'~app_brand~'/favicon/apple-touch-icon.png', 'cdn_package') }}">
+        <link rel="manifest" href="{{ asset('branding/'~app_brand~'/favicon/manifest.json', 'cdn_package') }}">
         {{ encore_entry_link_tags('app') }}
         {% block stylesheets %}{% endblock %}
     </head>
@@ -23,6 +25,7 @@
                     window.flashMsg += "{{ message|e('js') }} ";
                 {% endfor %}
                 window.app_locale = "{{ app.request.locale }}";
+                window.app_brand = "{{ app_brand }}";
                 window.app_translations = {{ translation_dumper.dump(app.request.locale)|json_encode|raw }};
             </script>
         {% endblock %}

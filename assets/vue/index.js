@@ -1,6 +1,6 @@
 import '../css/components.less';
-import 'vue-ui-kit/dist/ui-kit.css';
-import UiLibrary from 'vue-ui-kit/dist/ui-kit.common';
+import '@ui-kit/core/dist/ui-kit.css'
+import UiLibrary from '@ui-kit/core'
 
 import Vue from "vue";
 import VueI18n from 'vue-i18n'

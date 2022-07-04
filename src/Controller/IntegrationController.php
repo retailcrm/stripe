@@ -23,9 +23,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class IntegrationController extends AbstractController
 {
-    /** @var CRMConnectManager */
-    private $connectManager;
-
     /** @var TranslatorInterface */
     private $translator;
 
@@ -42,14 +39,12 @@ class IntegrationController extends AbstractController
     private $serializer;
 
     public function __construct(
-        CRMConnectManager $CRMConnectManager,
         TranslatorInterface $translator,
         ValidateModelManager $validateModelManager,
         ResponseManager $responseManager,
         EntityManagerInterface $em,
         SerializerInterface $serializer
     ) {
-        $this->connectManager = $CRMConnectManager;
         $this->translator = $translator;
         $this->validateModelManager = $validateModelManager;
         $this->responseManager = $responseManager;
@@ -62,14 +57,25 @@ class IntegrationController extends AbstractController
         return $this->render('base.html.twig');
     }
 
-    public function settings(string $slug, Request $request): Response
+    public function settings(string $slug, Request $request, CRMConnectManager $connectManager): Response
     {
-        // Из лк маркетплейса почему-то переход по post
         if (Request::METHOD_POST === $request->getMethod()) {
             return $this->redirectToRoute('stripe_settings', ['slug' => $slug]);
         }
 
-        return $this->render('base.html.twig');
+        if (!Uuid::isValid($slug)) {
+            return $this->redirectToRoute('index');
+        }
+        /** @var Integration|null $integration */
+        $integration = $this->em->getRepository(Integration::class)->find($slug);
+
+        if (null === $integration) {
+            return $this->redirectToRoute('index');
+        }
+
+        return $this->render('base.html.twig', [
+            'brand' => $connectManager->getBrand($integration),
+        ]);
     }
 
     public function connect(Request $request): JsonResponse
