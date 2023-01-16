@@ -10,7 +10,7 @@ use App\Entity\Model\UpdateInvoiceRequest;
 use App\Entity\Payment;
 use App\Entity\Refund;
 use App\Exception\CreateUpdateInvoiceException;
-use App\Factory\ApiClientFactory;
+use App\Factory\SimlaClientFactory;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerInterface;
 use Psr\Log\LoggerInterface;
@@ -82,9 +82,9 @@ class CRMConnectManager
     private $logger;
 
     /**
-     * @var ApiClientFactory
+     * @var SimlaClientFactory
      */
-    private $apiClientFactory;
+    private $simlaClientFactory;
 
     /**
      * CRMConnectManager constructor.
@@ -95,7 +95,7 @@ class CRMConnectManager
         SerializerInterface $serializer,
         ParameterBagInterface $parameterBag,
         ValidatorInterface $validator,
-        ApiClientFactory $apiClientFactory,
+        SimlaClientFactory $simlaClientFactory,
         PinbaService $pinbaService,
         LoggerInterface $logger
     ) {
@@ -104,7 +104,7 @@ class CRMConnectManager
         $this->serializer = $serializer;
         $this->parameterBag = $parameterBag;
         $this->validator = $validator;
-        $this->apiClientFactory = $apiClientFactory;
+        $this->simlaClientFactory = $simlaClientFactory;
         $this->pinbaService = $pinbaService;
         $this->logger = $logger;
     }
@@ -119,7 +119,7 @@ class CRMConnectManager
     public function checkInvoice(Payment $payment): bool
     {
         $integration = $payment->getAccount()->getIntegration();
-        $client = $this->apiClientFactory->create($integration);
+        $client = $this->simlaClientFactory->create($integration);
 
         $response = $this->pinbaService->timerHandler(
             [
@@ -144,7 +144,7 @@ class CRMConnectManager
     public function updateInvoice(Payment $payment, bool $withStatus = true, ?Refund $refund = null): bool
     {
         $integration = $payment->getAccount()->getIntegration();
-        $client = $this->apiClientFactory->create($integration);
+        $client = $this->simlaClientFactory->create($integration);
         $params = $this->createUpdateInvoiceRequest($payment, $withStatus, $refund);
 
         $response = $this->pinbaService->timerHandler(
@@ -269,7 +269,7 @@ class CRMConnectManager
     private function sendCrmRequest(IntegrationModule $module, Integration $integration): bool
     {
         $data = $this->serializer->toArray($module);
-        $client = $this->apiClientFactory->create($integration);
+        $client = $this->simlaClientFactory->create($integration);
 
         try {
             $response = $this->pinbaService->timerHandler(

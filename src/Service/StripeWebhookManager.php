@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Entity\StripeWebhook;
+use App\Factory\StripeClientFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -12,26 +13,23 @@ class StripeWebhookManager
 {
     public const WEBHOOK_ROUTE = 'stripe_hooks';
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private StripeClientFactory $stripeClientFactory;
+    private EntityManagerInterface $em;
+    private UrlGeneratorInterface $urlGenerator;
+    private string $stripeApiVersion;
+    private string $host;
 
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    /**
-     * @var string
-     */
-    private $host;
-
-    public function __construct(EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator, ParameterBagInterface $params)
-    {
+    public function __construct(
+        StripeClientFactory $stripeClientFactory,
+        EntityManagerInterface $em,
+        UrlGeneratorInterface $urlGenerator,
+        ParameterBagInterface $params
+    ) {
         $this->em = $em;
         $this->urlGenerator = $urlGenerator;
         $this->host = $params->get('domain');
+        $this->stripeApiVersion = $params->get('stripe.api_version');
+        $this->stripeClientFactory = $stripeClientFactory;
     }
 
     /**
@@ -45,7 +43,7 @@ class StripeWebhookManager
             ->setHost($this->host)
         ;
 
-        $stripe = new \Stripe\StripeClient($account->getSecretKey());
+        $stripe = $this->stripeClientFactory->create($account);
 
         $enabledEvents = [
             'payment_intent.amount_capturable_updated',
@@ -62,6 +60,7 @@ class StripeWebhookManager
 
         $endpoint = $stripe->webhookEndpoints->create([
             'url' => $url,
+            'api_version' => $this->stripeApiVersion,
             'enabled_events' => $enabledEvents,
             'description' => 'RetailCRM',
             'metadata' => [
@@ -91,7 +90,7 @@ class StripeWebhookManager
             return;
         }
 
-        $stripe = new \Stripe\StripeClient($account->getSecretKey());
+        $stripe = $this->stripeClientFactory->create($account);
 
         foreach ($account->getWebhooks() as $webhook) {
             try {

@@ -6,7 +6,7 @@ use App\Entity\Integration;
 use App\Exception\RetailcrmApiException;
 use RetailCrm\ApiClient;
 
-class ApiClientFactory
+class SimlaClientFactory
 {
     public function create(Integration $integration)
     {

@@ -6,6 +6,7 @@ use App\Entity\Account;
 use App\Entity\Payment;
 use App\Entity\PaymentAPIModel\CreatePayment;
 use App\Entity\Refund;
+use App\Factory\StripeClientFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
@@ -33,41 +34,27 @@ class StripeManager
     public const PAYMENT_TYPE_LINK = 'link';
     public const PAYMENT_TYPES = [self::PAYMENT_TYPE_LINK];
 
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /**
-     * @var PinbaService
-     */
-    private $pinbaService;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var CRMConnectManager
-     */
-    private $connectManager;
+    protected EntityManagerInterface $em;
+    private TranslatorInterface $translator;
+    private PinbaService $pinbaService;
+    private LoggerInterface $logger;
+    private CRMConnectManager $connectManager;
+    private StripeClientFactory $stripeClientFactory;
 
     public function __construct(
         EntityManagerInterface $em,
         TranslatorInterface $translator,
         PinbaService $pinbaService,
         LoggerInterface $logger,
-        CRMConnectManager $connectManager
+        CRMConnectManager $connectManager,
+        StripeClientFactory $stripeClientFactory
     ) {
         $this->em = $em;
         $this->translator = $translator;
         $this->pinbaService = $pinbaService;
         $this->logger = $logger;
         $this->connectManager = $connectManager;
+        $this->stripeClientFactory = $stripeClientFactory;
     }
 
     public function getAccountInfo(Account $account)
@@ -411,14 +398,6 @@ class StripeManager
 
     public function createClient(Account $account): StripeClient
     {
-        return $this->createClientByToken($account->getSecretKey());
-    }
-
-    public function createClientByToken(string $token): StripeClient
-    {
-        \Stripe\Stripe::setLogger($this->logger);
-        $client = new StripeClient($token);
-
-        return $client;
+        return $this->stripeClientFactory->create($account, $this->logger);
     }
 }

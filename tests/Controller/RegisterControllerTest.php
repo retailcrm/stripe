@@ -4,7 +4,7 @@ namespace App\Tests\Controller;
 
 use App\DataFixtures\Test\IntegrationData;
 use App\Entity\Integration;
-use App\Factory\ApiClientFactory;
+use App\Factory\SimlaClientFactory;
 use App\Service\ApiClientManager;
 use App\Service\CRMConnectManager;
 use App\Service\RegisterService;
@@ -117,10 +117,10 @@ class RegisterControllerTest extends BaseAppTest
         $apiClient = new ApiClient('https://newaccount-5.simla.com', 'newaccount-5');
         $apiClient->request = $apiClientRequest;
 
-        $restClientFactory = $this->createMock(ApiClientFactory::class);
+        $restClientFactory = $this->createMock(SimlaClientFactory::class);
         $restClientFactory->method('create')->willReturn($apiClient);
 
-        $this->client->getContainer()->set(ApiClientFactory::class, $restClientFactory);
+        $this->client->getContainer()->set(SimlaClientFactory::class, $restClientFactory);
 
         $this->client->request('POST', '/simple/connect', [
             'register' => json_encode(

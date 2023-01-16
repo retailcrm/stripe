@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Entity\Integration;
 use App\Exception\RetailcrmApiException;
-use App\Factory\ApiClientFactory;
+use App\Factory\SimlaClientFactory;
 
 class ApiClientManager
 {
@@ -14,16 +14,16 @@ class ApiClientManager
     private $pinbaService;
 
     /**
-     * @var ApiClientFactory
+     * @var SimlaClientFactory
      */
-    private $apiClientFactory;
+    private $simlaClientFactory;
 
     public function __construct(
         PinbaService $pinbaService,
-        ApiClientFactory $apiClientFactory
+        SimlaClientFactory $simlaClientFactory
     ) {
         $this->pinbaService = $pinbaService;
-        $this->apiClientFactory = $apiClientFactory;
+        $this->simlaClientFactory = $simlaClientFactory;
     }
 
     /**
@@ -31,7 +31,7 @@ class ApiClientManager
      */
     public function getCredentials(Integration $integration): array
     {
-        $client = $this->apiClientFactory->create($integration);
+        $client = $this->simlaClientFactory->create($integration);
 
         $response = $this->pinbaService->timerHandler(
             [
