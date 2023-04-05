@@ -398,7 +398,7 @@ class HookControllerTest extends BaseAppTest
             'created' => '1601828226',
             'data' => [
                 'object' => [
-                    'id' => $payment->getId(),
+                    'id' => $payment->getIntentId(),
                     'object' => 'payment_intent',
                     'status' => $status,
                     'amount' => $payment->getAmount() * 100,
@@ -408,18 +408,7 @@ class HookControllerTest extends BaseAppTest
                     'metadata' => [
                         'invoiceUuid' => $payment->getInvoiceUuid(),
                     ],
-                    'charges' => [
-                        'object' => 'list',
-                        'data' => [
-                            [
-                                'id' => 'ch_1HYZryIpoH9U2y2vJpyXHe9y',
-                                'object' => 'charge',
-                                'created' => '1601828130',
-                                'paid' => true,
-                                'refunded' => false,
-                            ],
-                        ],
-                    ],
+                    'latest_charge' => 'ch_1HYZryIpoH9U2y2vJpyXHe9y',
                 ],
             ],
             'livemode' => 1,
@@ -468,7 +457,7 @@ class HookControllerTest extends BaseAppTest
             'created' => '1601828226',
             'data' => [
                 'object' => [
-                    'id' => $payment->getId(),
+                    'id' => $payment->getIntentId(),
                     'object' => 'payment_intent',
                     'status' => $status,
                     'amount' => $amount ? $amount * 100 : $payment->getAmount() * 100,
@@ -478,18 +467,7 @@ class HookControllerTest extends BaseAppTest
                     'metadata' => [
                         'invoiceUuid' => $payment->getInvoiceUuid(),
                     ],
-                    'charges' => [
-                        'object' => 'list',
-                        'data' => [
-                            [
-                                'id' => 'ch_1HYZryIpoH9U2y2vJpyXHe9y',
-                                'object' => 'charge',
-                                'created' => '1601828130',
-                                'paid' => $paid,
-                                'refunded' => false,
-                            ],
-                        ],
-                    ],
+                    'latest_charge' => 'ch_1HYZryIpoH9U2y2vJpyXHe9y',
                 ],
             ],
             'livemode' => 1,
@@ -538,7 +516,7 @@ class HookControllerTest extends BaseAppTest
                 'object' => [
                     'id' => 'ch_1HYqwMIpoH9U2y2vAIRNbbM4',
                     'object' => 'charge',
-                    'payment_intent' => $payment->getId(),
+                    'payment_intent' => $payment->getIntentId(),
                     'paid' => $paid,
                     'refunds' => [
                         'object' => 'list',
@@ -549,7 +527,7 @@ class HookControllerTest extends BaseAppTest
                                 'created' => '1601893855',
                                 'amount' => $amount ? $amount * 100 : $payment->getAmount() * 100,
                                 'currency' => mb_strtolower($payment->getCurrency()),
-                                'payment_intent' => $payment->getId(),
+                                'payment_intent' => $payment->getIntentId(),
                                 'reason' => 'requested_by_customer',
                                 'status' => 'succeeded',
                             ],

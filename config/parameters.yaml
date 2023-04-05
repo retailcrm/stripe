@@ -1,7 +1,7 @@
 parameters:
     cdn_assets_base_url: //s3-o1.retailcrm.tech/eu-central-1/retailcrm-static
     locales: ['en', 'es', 'ru']
-    stripe.api_version: '2020-03-02'
+    stripe.api_version: '2022-11-15'
     register:
         secret: '%env(resolve:ONE_STEP_CONNECTION_SECRET)%'
         api-scopes:

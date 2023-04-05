@@ -12,6 +12,34 @@ use Stripe\StripeClient;
 
 class StripeManager extends BaseStripeManager
 {
+    public function getCharge(Payment $payment, string $id, bool $expandRefunds = false)
+    {
+        $refunds = $expandRefunds ? [
+            'object' => 'list',
+            'data' => [
+                [
+                    'id' => 're_' . Uuid::uuid4()->toString(),
+                    'object' => 'refund',
+                    'created' => '1601893855',
+                    'amount' => $payment->getAmount() * 100,
+                    'currency' => mb_strtolower($payment->getCurrency()),
+                    'payment_intent' => $payment->getIntentId(),
+                    'reason' => 'requested_by_customer',
+                    'status' => 'succeeded',
+                ],
+            ],
+        ] : null;
+
+        return [
+            'id' => 'ch_1HYZryIpoH9U2y2vJpyXHe9y',
+            'object' => 'charge',
+            'created' => '1601828130',
+            'paid' => true,
+            'refunded' => $expandRefunds,
+            'refunds' => $refunds,
+        ];
+    }
+
     public function getAccountInfo(Account $account)
     {
         return [
@@ -21,7 +49,6 @@ class StripeManager extends BaseStripeManager
             'capabilities' => [],
             'charges_enabled' => true,
             'country' => 'US',
-            'default_currency' => 'usd',
             'details_submitted' => '',
             'email' => 'test@gmail.com',
             'payouts_enabled' => false,
@@ -59,7 +86,7 @@ class StripeManager extends BaseStripeManager
     ): Payment {
         $payment = new Payment($account);
         $payment
-            ->setId('pi_' . Uuid::uuid4()->toString())
+            ->setId('cs_' . Uuid::uuid4()->toString())
             ->setStatus(self::STATUS_PAYMENT_PENDING)
             ->setPaid(false)
             ->setAmount($createPayment->getAmount())
@@ -70,6 +97,7 @@ class StripeManager extends BaseStripeManager
             ->setInvoiceUuid(Uuid::fromString($createPayment->getInvoiceUuid()))
             ->setPaymentUuid(Uuid::fromString($paymentUuid))
             ->setSessionId('cs_test_000000000000001')
+            ->setIntentId('pi_' . Uuid::uuid4()->toString())
             ->setRefundable(true)
         ;
 
@@ -122,7 +150,7 @@ class StripeManager extends BaseStripeManager
         }, 0);
 
         return [
-            'id' => $payment->getId(),
+            'id' => $payment->getIntentId(),
             'status' => self::STATUS_PAYMENT_REFUND_SUCCEEDED !== $payment->getStatus() ? $payment->getStatus() : self::STATUS_PAYMENT_SUCCEEDED,
             'amount' => $payment->getAmount() * 100,
             'currency' => mb_strtolower($payment->getCurrency()),

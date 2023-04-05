@@ -126,6 +126,13 @@ class Payment
     /**
      * @var string|null
      *
+     * @ORM\Column(name="intent_id", type="string", nullable=true)
+     */
+    protected $intentId;
+
+    /**
+     * @var string|null
+     *
      * @ORM\Column(name="cancellation_details", length=255, nullable=true)
      */
     protected $cancellationDetails;
@@ -397,6 +404,21 @@ class Payment
     {
         $this->refunds->add($refund);
         $refund->setPayment($this);
+
+        return $this;
+    }
+
+    public function getIntentId(): ?string
+    {
+        return $this->intentId;
+    }
+
+    /**
+     * @return Payment
+     */
+    public function setIntentId(?string $intentId): self
+    {
+        $this->intentId = $intentId;
 
         return $this;
     }

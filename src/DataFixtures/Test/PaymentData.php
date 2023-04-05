@@ -42,7 +42,7 @@ class PaymentData extends AbstractTestFixture
         for ($i = 0; $i < $this->count; ++$i) {
             $payment = new Payment($accounts[$i % count($accounts)]);
             $payment
-                ->setId('pi_' . $i)
+                ->setId('cs_' . $i)
                 ->setStatus($statuses[$i % count($statuses)])
                 ->setPaid(false)
                 ->setAmount('10.00')
@@ -53,6 +53,7 @@ class PaymentData extends AbstractTestFixture
                 ->setInvoiceUuid(Uuid::uuid4())
                 ->setPaymentUuid(Uuid::uuid4())
                 ->setSessionId('cs_test_' . $i)
+                ->setIntentId('pi_' . $i)
             ;
 
             if ('succeeded' === $payment->getStatus()) {

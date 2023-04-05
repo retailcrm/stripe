@@ -148,26 +148,16 @@ class StripeManager
             }
         );
 
-        $paymentIntent = $this->pinbaService->timerHandler(
-            [
-                'api' => 'stripe',
-                'method' => 'paymentIntentsRetrieve',
-            ],
-            static function () use ($client, $session) {
-                return $client->paymentIntents->retrieve($session['payment_intent'], []);
-            }
-        );
-
         $createdAt = new \DateTime();
-        $createdAt->setTimestamp($paymentIntent['created']);
+        $createdAt->setTimestamp($session['created']);
 
         $payment = new Payment($account);
         $payment
-            ->setId($paymentIntent['id'])
-            ->setStatus($paymentIntent['status'])
+            ->setId($session['id'])
+            ->setStatus(self::STATUS_PAYMENT_PENDING)
             ->setPaid(false)
-            ->setAmount($paymentIntent['amount'] / 100)
-            ->setCurrency(mb_strtoupper($paymentIntent['currency']))
+            ->setAmount($session['amount_total'] / 100)
+            ->setCurrency(mb_strtoupper($session['currency']))
             ->setCreatedAt($createdAt)
             ->setExpiresAt(null)
             ->setTest(!$session['livemode'])
@@ -201,7 +191,7 @@ class StripeManager
                 'method' => 'paymentIntentsRetrieve',
             ],
             static function () use ($client, $payment) {
-                return $client->paymentIntents->retrieve($payment->getId(), []);
+                return $client->paymentIntents->retrieve($payment->getIntentId(), []);
             }
         );
 
@@ -231,13 +221,13 @@ class StripeManager
                 'method' => 'capturePayment',
             ],
             static function () use ($client, $payment) {
-                return $client->paymentIntents->capture($payment->getId(), [
+                return $client->paymentIntents->capture($payment->getIntentId(), [
                     'amount_to_capture' => $payment->getAmount() * 100,
                 ]);
             }
         );
 
-        $charge = current($paymentIntent['charges']['data']);
+        $charge = $this->getCharge($payment, $paymentIntent['latest_charge']);
 
         $capturedAt = new \DateTime();
         $capturedAt->setTimestamp($charge['created']);
@@ -267,7 +257,27 @@ class StripeManager
                 'method' => 'paymentIntentsRetrieve',
             ],
             static function () use ($client, $payment) {
-                return $client->paymentIntents->retrieve($payment->getId(), []);
+                return $client->paymentIntents->retrieve($payment->getIntentId(), []);
+            }
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getCharge(Payment $payment, string $id, bool $expandRefunds = false)
+    {
+        $client = $this->createClient($payment->getAccount());
+
+        $params = $expandRefunds ? ['expand' => ['refunds']] : [];
+
+        return $this->pinbaService->timerHandler(
+            [
+                'api' => 'stripe',
+                'method' => 'chargeRetrieve',
+            ],
+            static function () use ($client, $id, $params) {
+                return $client->charges->retrieve($id, $params);
             }
         );
     }
@@ -280,7 +290,7 @@ class StripeManager
         $client = $this->createClient($payment->getAccount());
 
         $refundRequest = [
-            'payment_intent' => $payment->getId(),
+            'payment_intent' => $payment->getIntentId(),
             'amount' => $amount * 100,
         ];
 
@@ -358,11 +368,11 @@ class StripeManager
                 'method' => 'paymentIntentsRetrieve',
             ],
             static function () use ($client, $payment) {
-                return $client->paymentIntents->retrieve($payment->getId(), []);
+                return $client->paymentIntents->retrieve($payment->getIntentId(), []);
             }
         );
 
-        $charge = current($paymentIntent['charges']['data']);
+        $charge = $this->getCharge($payment, $paymentIntent['latest_charge']);
         $cancellationDetailsReason = $payment->getCancellationDetails();
 
         if (isset($paymentIntent['cancellation_reason']) && !empty($paymentIntent['cancellation_reason'])) {

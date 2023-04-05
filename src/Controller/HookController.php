@@ -111,7 +111,9 @@ class HookController extends AbstractController implements LoggableController
         }
 
         /** @var Payment|null $payment */
-        $payment = $this->em->getRepository(Payment::class)->find($paymentIntent['id']);
+        $payment = $this->em->getRepository(Payment::class)->findOneBy([
+            'invoiceUuid' => $paymentIntent['metadata']['invoiceUuid'],
+        ]);
         if (!$payment) {
             return new Response('someone else\'s payment');
         }
@@ -172,7 +174,9 @@ class HookController extends AbstractController implements LoggableController
         }
 
         /** @var Payment|null $payment */
-        $payment = $this->em->getRepository(Payment::class)->find($paymentIntent['id']);
+        $payment = $this->em->getRepository(Payment::class)->findOneBy([
+            'invoiceUuid' => $paymentIntent['metadata']['invoiceUuid'],
+        ]);
         if (!$payment) {
             return new Response('someone else\'s payment');
         }
@@ -204,7 +208,9 @@ class HookController extends AbstractController implements LoggableController
         }
 
         /** @var Payment|null $payment */
-        $payment = $this->em->getRepository(Payment::class)->find($paymentIntent['id']);
+        $payment = $this->em->getRepository(Payment::class)->findOneBy([
+            'invoiceUuid' => $paymentIntent['metadata']['invoiceUuid'],
+        ]);
         if (!$payment) {
             return new Response('someone else\'s payment');
         }
@@ -232,7 +238,9 @@ class HookController extends AbstractController implements LoggableController
         $charge = $event->data->object;
 
         /** @var Payment|null $payment */
-        $payment = $this->em->getRepository(Payment::class)->find($charge['payment_intent']);
+        $payment = $this->em->getRepository(Payment::class)->findOneBy([
+            'intentId' => $charge['payment_intent'],
+        ]);
         if (!$payment) {
             return new Response('someone else\'s payment');
         }
@@ -251,10 +259,14 @@ class HookController extends AbstractController implements LoggableController
             return new Response();
         }
 
-        if (isset($charge['refunds']['data']) && is_array($charge['refunds']['data'])) {
-            $refundResponse = current($charge['refunds']['data']);
-        } elseif (is_array($charge['refunds'])) {
-            $refundResponse = current($charge['refunds']);
+        $fullCharge = isset($charge['refunds']['data']) && count($charge['refunds']['data'])
+            ? $charge
+            : $this->stripeManager->getCharge($payment, $charge['id'], true);
+
+        if (isset($fullCharge['refunds']['data']) && is_array($fullCharge['refunds']['data'])) {
+            $refundResponse = current($fullCharge['refunds']['data']);
+        } elseif (is_array($fullCharge['refunds'])) {
+            $refundResponse = current($fullCharge['refunds']);
         } else {
             return new Response();
         }
@@ -302,8 +314,8 @@ class HookController extends AbstractController implements LoggableController
     private function updatePayment(Payment $payment, $paymentIntent)
     {
         $charge = [];
-        if ($paymentIntent['charges']['data']) {
-            $charge = current($paymentIntent['charges']['data']);
+        if ($paymentIntent['latest_charge']) {
+            $charge = $this->stripeManager->getCharge($payment, $paymentIntent['latest_charge']);
         }
         $cancellationDetailsReason = $payment->getCancellationDetails();
 
@@ -327,6 +339,7 @@ class HookController extends AbstractController implements LoggableController
         }
 
         $payment
+            ->setIntentId($paymentIntent['id'])
             ->setAmount($paymentIntent['amount'] / 100)
             ->setStatus($paymentIntent['status'])
             ->setPaid(isset($charge['paid']) ? $charge['paid'] : false)

@@ -215,7 +215,7 @@ class IntegrationEnableTest extends BaseAppTest
                 'object' => [
                     'id' => 'ch_1HYqwMIpoH9U2y2vAIRNbbM4',
                     'object' => 'charge',
-                    'payment_intent' => $payment->getId(),
+                    'payment_intent' => $payment->getIntentId(),
                     'paid' => true,
                     'refunds' => [
                         'object' => 'list',
@@ -226,7 +226,7 @@ class IntegrationEnableTest extends BaseAppTest
                                 'created' => '1601893855',
                                 'amount' => '1000',
                                 'currency' => 'rub',
-                                'payment_intent' => $payment->getId(),
+                                'payment_intent' => $payment->getIntentId(),
                                 'reason' => 'requested_by_customer',
                                 'status' => 'succeeded',
                             ],
@@ -238,7 +238,7 @@ class IntegrationEnableTest extends BaseAppTest
 
         return [
             'object' => [
-                'id' => $payment->getId(),
+                'id' => $payment->getIntentId(),
                 'object' => 'payment_intent',
                 'status' => $status,
                 'amount' => '1000',
