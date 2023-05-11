@@ -17,7 +17,7 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Repository,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Event,Entity,Repository,Migrations,Tests,Kernel.php}'
 
     App\Tests\Mock\:
         resource: '../tests/Mock'

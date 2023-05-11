@@ -16,7 +16,7 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Repository,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Event,Entity,Repository,Migrations,Tests,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -74,3 +74,12 @@ services:
     App\Service\StripeManager:
         tags:
             - { name: monolog.logger, channel: network }
+
+    monolog.formatter.request_id:
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            - "[%%datetime%%] [%%extra.request_id%%] %%channel%%.%%level_name%%: %%message%% %%context%% %%extra%%\n"
+
+    App\Processor\RequestIdProcessor:
+        tags:
+            - { name: monolog.processor }

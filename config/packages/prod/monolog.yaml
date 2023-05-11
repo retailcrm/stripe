@@ -5,25 +5,31 @@ monolog:
             type: stream
             path: "php://stdout"
             channels: ["network"]
+            formatter: monolog.formatter.request_id
         main:
             type: fingers_crossed
             action_level: error
             handler: nested
             excluded_http_codes: [404, 405]
             buffer_size: 50 # How many messages should be saved? Prevent memory leaks
+            formatter: monolog.formatter.request_id
         nested:
             type: stream
             path: "php://stderr"
             level: debug
+            formatter: monolog.formatter.request_id
         console:
             type: console
             process_psr_3_messages: false
             channels: ["!event", "!doctrine"]
+            formatter: monolog.formatter.request_id
         deprecation:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+            formatter: monolog.formatter.request_id
         deprecation_filter:
             type: filter
             handler: deprecation
             max_level: info
             channels: ["php"]
+            formatter: monolog.formatter.request_id

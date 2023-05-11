@@ -3,6 +3,7 @@
 namespace App\EventSubscriber;
 
 use App\Controller\LoggableController;
+use App\Event\OutcomingRequestEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -29,6 +30,7 @@ class LoggerSubscriber implements EventSubscriberInterface
         return [
             KernelEvents::CONTROLLER => 'onKernelController',
             KernelEvents::RESPONSE => 'onKernelResponse',
+            OutcomingRequestEvent::NAME => 'onOutcomingRequest',
         ];
     }
 
@@ -43,9 +45,7 @@ class LoggerSubscriber implements EventSubscriberInterface
         if ($controller[0] instanceof LoggableController) {
             $request = $event->getRequest();
 
-            $requestId = uniqid('', true);
-
-            $message = $requestId . ' Incoming request: ' . $request->getMethod() . ' ' . $request->getPathInfo();
+            $message = 'Incoming request: ' . $request->getMethod() . ' ' . $request->getPathInfo();
 
             $queryParams = $request->query->all();
             if (count($queryParams)) {
@@ -57,12 +57,11 @@ class LoggerSubscriber implements EventSubscriberInterface
                 $message .= ' with params: ' . json_encode($params);
             }
 
-            $message .= ' body ' . $request->getContent();
+            $message .= ' body ' . json_encode(json_decode($request->getContent(), true));
 
             $this->logger->info($message);
 
             $request->attributes->set('logged', true);
-            $request->attributes->set('requestId', $requestId);
         }
     }
 
@@ -72,15 +71,19 @@ class LoggerSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $requestId = $event->getRequest()->attributes->get('requestId');
-
         $response = $event->getResponse();
 
-        $message = sprintf('%s Send response with code %s and with body %s',
-            $requestId,
+        $message = sprintf('Send response with code %s and with body %s',
             $response->getStatusCode(),
-            $response->getContent(),
+            json_encode(json_decode($response->getContent(), true)),
         );
+
+        $this->logger->info($message);
+    }
+
+    public function onOutcomingRequest(OutcomingRequestEvent $event)
+    {
+        $message = 'Stripe API request "' . $event->getMethod() . '", request: ' . $event->getRequest() . ', response: ' . $event->getResponse();
 
         $this->logger->info($message);
     }

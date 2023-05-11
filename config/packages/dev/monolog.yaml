@@ -6,11 +6,13 @@ monolog:
             type: stream
             path: "php://stdout"
             channels: ["network"]
+            formatter: monolog.formatter.request_id
         main:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
             channels: ["!event"]
+            formatter: monolog.formatter.request_id
         # uncomment to get logging in your browser
         # you may have to allow bigger header sizes in your Web server configuration
         #firephp:
@@ -23,3 +25,4 @@ monolog:
             type: console
             process_psr_3_messages: false
             channels: ["!event", "!doctrine", "!console"]
+            formatter: monolog.formatter.request_id

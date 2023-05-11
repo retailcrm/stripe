@@ -44,7 +44,7 @@ class IntegrationTest extends AbstractApiTest
             'integration' => json_encode([
                 'crmUrl' => 'https://msdfdfsdfdsfsdf.retailcrm.es',
                 'crmApiKey' => 'sadsafdsf7dsf79sdfs',
-            ], JSON_PRETTY_PRINT),
+            ]),
         ];
         $client->request(Request::METHOD_POST, $url, $params);
         $response = json_decode($client->getResponse()->getContent(), true);
@@ -58,7 +58,7 @@ class IntegrationTest extends AbstractApiTest
             'integration' => json_encode([
                 'crmUrl' => 'asdasdas89a89sd',
                 'crmApiKey' => 'sadsafdsf7dsf79sdfs',
-            ], JSON_PRETTY_PRINT),
+            ]),
         ];
         $client->request(Request::METHOD_POST, $url, $params);
         $response = json_decode($client->getResponse()->getContent(), true);
@@ -73,7 +73,7 @@ class IntegrationTest extends AbstractApiTest
                     . '878asdasasd878asdasasd878asdasasd878asdasasd878asdasasd878asdasasd878asdasasd878asdasasd878asdasasd8'
                     . '78asdasasd878asdasasd878asdasasd878asdasasd878asdasasd878asdasasd878asdasasd878asdasasd878asdasasd8'
                     . '78asdasasd878asdasasd878asdasasd878asdasasd878asdas',
-            ], JSON_PRETTY_PRINT),
+            ]),
         ];
         $client->request(Request::METHOD_POST, $url, $params);
         $response = json_decode($client->getResponse()->getContent(), true);

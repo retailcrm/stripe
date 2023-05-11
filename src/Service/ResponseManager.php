@@ -25,7 +25,7 @@ class ResponseManager
 
     public function jsonResponse(array $data, $statusCode, $headers = []): JsonResponse
     {
-        return new JsonResponse(json_encode($data, JSON_PRETTY_PRINT), $statusCode, $headers, true);
+        return new JsonResponse(json_encode($data), $statusCode, $headers, true);
     }
 
     public function invalidJsonResponse(string $errorMsg, $errors = null, $statusCode = 400): JsonResponse
@@ -36,7 +36,7 @@ class ResponseManager
             'success' => false,
             'errorMsg' => $errorMsg,
             'errors' => $responseErrors,
-        ], JSON_PRETTY_PRINT);
+        ]);
 
         return new JsonResponse($data, $statusCode, [], true);
     }
@@ -49,7 +49,7 @@ class ResponseManager
             'success' => false,
             'errorMsg' => $errorMsg,
             'errors' => $responseErrors,
-        ], JSON_PRETTY_PRINT);
+        ]);
 
         return new JsonResponse($data, $statusCode, [], true);
     }

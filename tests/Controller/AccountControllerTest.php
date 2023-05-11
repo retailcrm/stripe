@@ -213,7 +213,7 @@ class AccountControllerTest extends AbstractApiTest
             'account' => json_encode([
                 'test' => !$isTest,
                 'approveManually' => 1,
-            ], JSON_PRETTY_PRINT),
+            ]),
         ];
         $client->request(Request::METHOD_POST, $url, $params);
         $response = json_decode($client->getResponse()->getContent(), true);
@@ -247,7 +247,7 @@ class AccountControllerTest extends AbstractApiTest
         $params = [
             'account' => json_encode([
                 'approveManually' => 1,
-            ], JSON_PRETTY_PRINT),
+            ]),
         ];
         $client->request(Request::METHOD_POST, $url, $params);
         $response = json_decode($client->getResponse()->getContent(), true);

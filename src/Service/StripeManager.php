@@ -6,11 +6,13 @@ use App\Entity\Account;
 use App\Entity\Payment;
 use App\Entity\PaymentAPIModel\CreatePayment;
 use App\Entity\Refund;
+use App\Event\OutcomingRequestEvent;
 use App\Factory\StripeClientFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Stripe\StripeClient;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class StripeManager
@@ -40,6 +42,7 @@ class StripeManager
     private LoggerInterface $logger;
     private CRMConnectManager $connectManager;
     private StripeClientFactory $stripeClientFactory;
+    private EventDispatcherInterface $dispatcher;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -47,7 +50,8 @@ class StripeManager
         PinbaService $pinbaService,
         LoggerInterface $logger,
         CRMConnectManager $connectManager,
-        StripeClientFactory $stripeClientFactory
+        StripeClientFactory $stripeClientFactory,
+        EventDispatcherInterface $dispatcher
     ) {
         $this->em = $em;
         $this->translator = $translator;
@@ -55,6 +59,7 @@ class StripeManager
         $this->logger = $logger;
         $this->connectManager = $connectManager;
         $this->stripeClientFactory = $stripeClientFactory;
+        $this->dispatcher = $dispatcher;
     }
 
     public function getAccountInfo(Account $account)
@@ -70,6 +75,11 @@ class StripeManager
                 return $client->accounts->retrieve($account->getAccountId(), []);
             }
         );
+        $this->dispatcher->dispatch(new OutcomingRequestEvent(
+            'accounts->retrieve',
+            ['id' => $account->getAccountId()],
+            $stripeAccount->toArray()
+        ), OutcomingRequestEvent::NAME);
 
         return $stripeAccount;
     }
@@ -88,6 +98,11 @@ class StripeManager
                 return $client->countrySpecs->retrieve($stripeAccount['country'], []);
             }
         );
+        $this->dispatcher->dispatch(new OutcomingRequestEvent(
+            'countrySpecs->retrieve',
+            ['id' => $stripeAccount['country']],
+            $countrySpec->toArray()
+        ), OutcomingRequestEvent::NAME);
 
         return $countrySpec;
     }
@@ -147,6 +162,11 @@ class StripeManager
                 return $client->checkout->sessions->create($createSession);
             }
         );
+        $this->dispatcher->dispatch(new OutcomingRequestEvent(
+            'checkout->sessions->create',
+            $createSession,
+            $session->toArray()
+        ), OutcomingRequestEvent::NAME);
 
         $createdAt = new \DateTime();
         $createdAt->setTimestamp($session['created']);
@@ -194,6 +214,11 @@ class StripeManager
                 return $client->paymentIntents->retrieve($payment->getIntentId(), []);
             }
         );
+        $this->dispatcher->dispatch(new OutcomingRequestEvent(
+            'paymentIntents->retrieve',
+            ['id' => $payment->getIntentId()],
+            $paymentIntent->toArray()
+        ), OutcomingRequestEvent::NAME);
 
         $this->pinbaService->timerHandler(
             [
@@ -215,17 +240,21 @@ class StripeManager
     {
         $client = $this->createClient($payment->getAccount());
 
+        $capture = ['amount_to_capture' => $payment->getAmount() * 100];
         $paymentIntent = $this->pinbaService->timerHandler(
             [
                 'api' => 'stripe',
                 'method' => 'capturePayment',
             ],
-            static function () use ($client, $payment) {
-                return $client->paymentIntents->capture($payment->getIntentId(), [
-                    'amount_to_capture' => $payment->getAmount() * 100,
-                ]);
+            static function () use ($client, $payment, $capture) {
+                return $client->paymentIntents->capture($payment->getIntentId(), $capture);
             }
         );
+        $this->dispatcher->dispatch(new OutcomingRequestEvent(
+            'paymentIntents->capture',
+            $capture,
+            $paymentIntent->toArray()
+        ), OutcomingRequestEvent::NAME);
 
         $charge = $this->getCharge($payment, $paymentIntent['latest_charge']);
 
@@ -251,7 +280,7 @@ class StripeManager
     {
         $client = $this->createClient($payment->getAccount());
 
-        return $this->pinbaService->timerHandler(
+        $paymentIntent = $this->pinbaService->timerHandler(
             [
                 'api' => 'stripe',
                 'method' => 'paymentIntentsRetrieve',
@@ -260,6 +289,13 @@ class StripeManager
                 return $client->paymentIntents->retrieve($payment->getIntentId(), []);
             }
         );
+        $this->dispatcher->dispatch(new OutcomingRequestEvent(
+            'paymentIntents->retrieve',
+            ['id' => $payment->getIntentId()],
+            $paymentIntent->toArray()
+        ), OutcomingRequestEvent::NAME);
+
+        return $paymentIntent;
     }
 
     /**
@@ -271,7 +307,7 @@ class StripeManager
 
         $params = $expandRefunds ? ['expand' => ['refunds']] : [];
 
-        return $this->pinbaService->timerHandler(
+        $charge = $this->pinbaService->timerHandler(
             [
                 'api' => 'stripe',
                 'method' => 'chargeRetrieve',
@@ -280,6 +316,13 @@ class StripeManager
                 return $client->charges->retrieve($id, $params);
             }
         );
+        $this->dispatcher->dispatch(new OutcomingRequestEvent(
+            'charges->retrieve',
+            ['id' => $id],
+            $charge->toArray()
+        ), OutcomingRequestEvent::NAME);
+
+        return $charge;
     }
 
     /**
@@ -303,6 +346,11 @@ class StripeManager
                 return $client->refunds->create($refundRequest);
             }
         );
+        $this->dispatcher->dispatch(new OutcomingRequestEvent(
+            'refunds->create',
+            $refundRequest,
+            $refundResponse->toArray()
+        ), OutcomingRequestEvent::NAME);
 
         $refund = $this->createRefundIfNotExists($refundResponse, $payment);
         $this->em->flush();
@@ -371,6 +419,11 @@ class StripeManager
                 return $client->paymentIntents->retrieve($payment->getIntentId(), []);
             }
         );
+        $this->dispatcher->dispatch(new OutcomingRequestEvent(
+            'paymentIntents->retrieve',
+            ['id' => $payment->getIntentId()],
+            $paymentIntent->toArray()
+        ), OutcomingRequestEvent::NAME);
 
         $charge = $this->getCharge($payment, $paymentIntent['latest_charge']);
         $cancellationDetailsReason = $payment->getCancellationDetails();
