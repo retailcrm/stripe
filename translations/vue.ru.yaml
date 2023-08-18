@@ -4,6 +4,7 @@ base:
     curIntegration: 'Stripe'
     help: 'Попросить помощи'
     documentation: 'Документация по настройке'
+    docLink: 'https://docs.retailcrm.ru/Users/Integration/PaymentServices/StripeIntegration/IntegrationSettingsWithStripe'
 module:
     connect:
         api_key: 'API Ключ'

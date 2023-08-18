@@ -39,7 +39,9 @@
         "symfony/web-link": "5.1.*",
         "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "5.1.*",
-        "vaimo/composer-patches": "^4.20"
+        "vaimo/composer-patches": "^4.20",
+        "ext-json": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
@@ -50,8 +52,7 @@
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "^5.1",
         "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*",
-        "ext-json": "*"
+        "symfony/test-pack": "*"
     },
     "repositories": [
         {

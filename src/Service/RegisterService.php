@@ -93,12 +93,33 @@ class RegisterService
         }
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function getPublicUrl(string $systemUrl): string
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $systemUrl . '/api/system-info');
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $publicUrl = json_decode(curl_exec($ch), true, 512, JSON_THROW_ON_ERROR)['publicUrl'];
+        curl_close($ch);
+
+        return $publicUrl;
+    }
+
     private function createConnection(RegisterRequest $request): Integration
     {
+        $publicUrl = $request->systemUrl;
+        try {
+            $publicUrl = $this->getPublicUrl($request->systemUrl);
+        } catch (\Throwable $e) {
+        }
+
         $integration = new Integration();
         $integration
             ->setCrmApiKey($request->apiKey)
-            ->setCrmUrl($request->systemUrl);
+            ->setCrmUrl($publicUrl);
 
         if (null !== $this->validateModelManager->validateWithFields($integration, ['connect'])) {
             throw new \InvalidArgumentException('Invalid request data'); // todo proper error handling

@@ -4,6 +4,7 @@ base:
     curIntegration: 'Stripe'
     help: 'Pedir ayuda'
     documentation: 'Documentación de instalación'
+    docLink: 'https://docs.simla.com/es/Users/Integration/PaymentServices/Stripe/IntegracionStripe'
 module:
     connect:
         api_key: 'La clave API'
