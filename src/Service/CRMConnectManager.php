@@ -97,7 +97,7 @@ class CRMConnectManager
         ValidatorInterface $validator,
         SimlaClientFactory $simlaClientFactory,
         PinbaService $pinbaService,
-        LoggerInterface $logger
+        LoggerInterface $crmLogger
     ) {
         $this->urlGenerator = $urlGenerator;
         $this->packages = $packages;
@@ -106,7 +106,7 @@ class CRMConnectManager
         $this->validator = $validator;
         $this->simlaClientFactory = $simlaClientFactory;
         $this->pinbaService = $pinbaService;
-        $this->logger = $logger;
+        $this->logger = $crmLogger;
     }
 
     public function sendModuleInCRM(Integration $integration): bool
@@ -134,6 +134,7 @@ class CRMConnectManager
                 ]);
             }
         );
+        $this->logger->info(sprintf('[Check invoice] (payment %s) response: %s', $payment->getId(), json_encode($response->getResponse())));
 
         return $response->isSuccessful() && $response['success'];
     }
@@ -147,6 +148,8 @@ class CRMConnectManager
         $client = $this->simlaClientFactory->create($integration);
         $params = $this->createUpdateInvoiceRequest($payment, $withStatus, $refund);
 
+        $this->logger->info(sprintf('[Update invoice] (payment %s) params: %s', $payment->getId(), json_encode($params)));
+
         $response = $this->pinbaService->timerHandler(
             [
                 'api' => 'RetailCRM',
@@ -156,6 +159,7 @@ class CRMConnectManager
                 return $client->request->paymentUpdateInvoice($params);
             }
         );
+        $this->logger->info(sprintf('[Update invoice] (payment %s) response: %s', $payment->getId(), json_encode($response->getResponse())));
 
         return $response->isSuccessful() && $response['success'];
     }

@@ -100,7 +100,7 @@ class PaymentAPIController extends AbstractController implements LoggableControl
             );
         }
 
-        /** @var Account $shop */
+        /** @var Account $account */
         $account = $em->getRepository(Account::class)->find($createPayment->getShopId());
 
         if ($account->getIntegration()->getSlug() !== $integration->getSlug()) {

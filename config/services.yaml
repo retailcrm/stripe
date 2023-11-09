@@ -69,7 +69,7 @@ services:
 
     App\Service\CRMConnectManager:
         tags:
-            - { name: monolog.logger, channel: network }
+            - { name: monolog.logger, channel: crm }
 
     App\Service\StripeManager:
         tags:

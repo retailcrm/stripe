@@ -6,6 +6,12 @@ monolog:
             path: "php://stdout"
             channels: ["network"]
             formatter: monolog.formatter.request_id
+        crm:
+            level: info
+            type: stream
+            path: "php://stdout"
+            channels: [ "crm" ]
+            formatter: monolog.formatter.request_id
         main:
             type: fingers_crossed
             action_level: error
