@@ -1,6 +1,6 @@
 {
-    "gitlab-domains": ["gitlab.com", "gitlab.skillum.ru"],
+    "gitlab-domains": ["gitlab.com", "gitlab.retailcrm.tech"],
     "gitlab-token": {
-        "gitlab.skillum.ru": "xxxxxxxxxxxxxxxxxxxx"
+        "gitlab.retailcrm.tech": "xxxxxxxxxxxxxxxxxxxx"
     }
 }
