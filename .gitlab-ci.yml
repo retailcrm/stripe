@@ -51,12 +51,13 @@ release:
         - docker-compose run -e APP_ENV=prod -e APP_DEBUG=0 --rm --no-deps -u root php bin/console --env=prod fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
 
         # build static
-        - docker-compose run --rm --no-deps -u root node sh -c 'yarn install && yarn build'
+        - docker-compose run --rm --no-deps -u $(id -u):$(id -g) node sh -c 'yarn install && yarn build'
 
         # set/fix permissions
-        - docker-compose run --rm --no-deps -u root php chmod -R a-w /var/www/stripe
         - docker-compose run --rm --no-deps -u root php ls -l | grep webpack # debug
         - docker-compose run --rm --no-deps -u root php chown -R www-data:www-data /var/www/stripe
+        - docker-compose run --rm --no-deps -u root php ls -l | grep webpack # debug
+        - docker-compose run --rm --no-deps -u root php chmod -R a-w /var/www/stripe
 
         - docker build -t $CI_REGISTRY_IMAGE -f services/php_prod/Dockerfile ./
 
